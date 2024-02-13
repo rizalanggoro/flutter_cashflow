@@ -5,7 +5,11 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/data/providers/isar.dart';
+import '../../../shared/presentation/providers/expense_categories.dart';
+import '../../../shared/presentation/providers/income_categories.dart';
+import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../../../shared/presentation/providers/theme.dart';
+import '../domain/usecases/dummy_transactions.dart';
 
 @RoutePage()
 class HomeSettingPage extends HookConsumerWidget {
@@ -133,6 +137,55 @@ class HomeSettingPage extends HookConsumerWidget {
                 ),
               );
             },
+          ),
+          ListTile(
+            leading: CircleAvatar(
+              child: Icon(Icons.payment_rounded),
+            ),
+            trailing: Icon(Icons.chevron_right_rounded),
+            title: Text('Dummy transaksi'),
+            subtitle: Text(
+              'Tambahkan beberapa transaksi dummy untuk kebutuhan debugging',
+            ),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: Text('Dummy transaksi'),
+                content: Text(
+                  'Tambahkan 10 dummy transaksi secara random ke database?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.router.pop(),
+                    child: const Text('Batal'),
+                  ),
+                  TextButton(
+                    onPressed: () => ref
+                        .read(dummyTransactionsUseCaseProvider)
+                        .call(
+                          wallet: ref.read(selectedWalletProvider).value,
+                          incomeCategories:
+                              ref.read(incomeCategoriesProvider).value,
+                          expenseCategories:
+                              ref.read(expenseCategoriesProvider).value,
+                        )
+                        .then(
+                          (value) => value.fold(
+                            (l) => context.showSnackBar(message: l.message),
+                            (r) => context.showSnackBar(
+                              message:
+                                  'Berhasil menambahkan 10 dummy transaksi',
+                            ),
+                          ),
+                        )
+                        .whenComplete(
+                          () => context.router.pop(),
+                        ),
+                    child: const Text('Ya'),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
