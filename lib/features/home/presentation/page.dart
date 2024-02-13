@@ -66,10 +66,11 @@ class HomePage extends HookConsumerWidget {
             ),
             actions: tabsRouter.activeIndex < 3
                 ? [
-                    IconButton(
-                      onPressed: () {},
-                      icon: const Icon(Icons.sort_rounded),
-                    ),
+                    if (tabsRouter.activeIndex > 0)
+                      IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.sort_rounded),
+                      ),
                     IconButton(
                       icon: const Icon(Icons.wallet_rounded),
                       onPressed: () => context.router.push(
