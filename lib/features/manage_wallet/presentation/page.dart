@@ -10,6 +10,7 @@ import '../../../shared/presentation/providers/wallets.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/failure_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';
+import 'widgets/bottom_sheet_confirm_delete_wallet.dart';
 
 @RoutePage()
 class ManageWalletPage extends HookConsumerWidget {
@@ -20,7 +21,9 @@ class ManageWalletPage extends HookConsumerWidget {
     log('build: manage wallet');
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Dompet')),
+      appBar: AppBar(
+        title: const Text('Dompet'),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => context.router.push(WriteWalletRoute()),
         child: const Icon(Icons.add_rounded),
@@ -38,9 +41,31 @@ class ManageWalletPage extends HookConsumerWidget {
 
                       return ListTile(
                         title: Text(wallet.name),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.more_vert_rounded),
+                        trailing: PopupMenuButton(
+                          itemBuilder: (context) => [
+                            const PopupMenuItem(
+                              child: ListTile(
+                                leading: Icon(Icons.edit_rounded),
+                                title: Text('Ubah dompet'),
+                              ),
+                            ),
+                            PopupMenuItem(
+                              onTap: () => showModalBottomSheet(
+                                context: context,
+                                useSafeArea: true,
+                                isScrollControlled: true,
+                                showDragHandle: true,
+                                builder: (context) =>
+                                    BottomSheetConfirmDeleteWallet(
+                                  wallet: wallet,
+                                ),
+                              ),
+                              child: const ListTile(
+                                leading: Icon(Icons.delete_rounded),
+                                title: Text('Hapus dompet'),
+                              ),
+                            ),
+                          ],
                         ),
                       );
                     },
