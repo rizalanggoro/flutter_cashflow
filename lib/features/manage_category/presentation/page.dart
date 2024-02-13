@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cashflow/features/manage_category/presentation/widgets/bottom_sheet_confirm_delete_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -104,9 +105,31 @@ class ManageCategoryPage extends HookConsumerWidget {
                               ));
                             },
                           ),
-                          trailing: IconButton(
-                            onPressed: () => {},
-                            icon: const Icon(Icons.more_vert_rounded),
+                          trailing: PopupMenuButton(
+                            itemBuilder: (context) => [
+                              PopupMenuItem(
+                                child: ListTile(
+                                  leading: Icon(Icons.edit_rounded),
+                                  title: Text('Ubah kategori'),
+                                ),
+                              ),
+                              PopupMenuItem(
+                                onTap: () => showModalBottomSheet(
+                                  context: context,
+                                  showDragHandle: true,
+                                  useSafeArea: true,
+                                  isScrollControlled: true,
+                                  builder: (context) =>
+                                      BottomSheetConfirmDeleteCategory(
+                                    category: category,
+                                  ),
+                                ),
+                                child: ListTile(
+                                  leading: Icon(Icons.delete_rounded),
+                                  title: Text('Hapus kategori'),
+                                ),
+                              ),
+                            ],
                           ),
                         );
                       },
