@@ -1,5 +1,5 @@
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../data/models/wallet.dart';
 import '../../data/providers/isar.dart';

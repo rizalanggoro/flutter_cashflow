@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
-import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 import '../../../core/failure/failure.dart';
 import '../../../core/utils/typedefs.dart';
