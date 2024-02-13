@@ -96,7 +96,7 @@ class DetailTransactionPage extends HookConsumerWidget {
                               bottom: 8,
                             ),
                             child: Text(
-                              'Informasi lainnya',
+                              'Rincian transaksi',
                               style: context.textTheme.titleMedium,
                             ),
                           ),
