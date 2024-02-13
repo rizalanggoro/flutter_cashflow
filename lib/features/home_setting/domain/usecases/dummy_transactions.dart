@@ -60,7 +60,6 @@ class _UseCase {
           await _isar.transactionModels.put(transaction);
           await transaction.category.save();
           await transaction.wallet.save();
-          print(transaction.date);
         }
       });
 
