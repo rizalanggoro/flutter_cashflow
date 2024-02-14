@@ -37,7 +37,7 @@ class BottomSheetTransactionFilter extends HookConsumerWidget {
               style: context.textTheme.bodyMedium,
             ),
           ),
-          Gap(8),
+          const Gap(8),
           ...[
             TransactionRangeFilterItem(
               title: 'Tahunan',
