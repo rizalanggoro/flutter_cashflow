@@ -273,6 +273,8 @@ class HomeChartPage extends HookConsumerWidget {
             ),
           ),
           const Gap(8),
+
+          // detail statistics
           const Divider(),
           Padding(
             padding: const EdgeInsets.only(
@@ -337,6 +339,63 @@ class HomeChartPage extends HookConsumerWidget {
             ),
           ),
           const Gap(16),
+
+          // card income, expense
+          Card(
+            margin: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(
+                    left: 16,
+                    right: 16,
+                    top: 16,
+                  ),
+                  child: Text(
+                    'Status anggaran',
+                    style: context.textTheme.titleMedium,
+                  ),
+                ),
+                ListTile(
+                  leading: const CircleAvatar(
+                    child: Icon(Icons.trending_down_rounded),
+                  ),
+                  title: const Text('Defisit'),
+                  subtitle: Text(NumberFormat.currency().format(-12000)),
+                ),
+                const Divider(),
+                ListTile(
+                  leading:
+                      const CircleAvatar(child: Icon(Icons.south_west_rounded)),
+                  title: const Text('Pemasukan'),
+                  subtitle: Text(NumberFormat.currency().format(12000)),
+                ),
+                ListTile(
+                  leading:
+                      const CircleAvatar(child: Icon(Icons.north_east_rounded)),
+                  title: const Text('Pengeluaran'),
+                  subtitle: Text(NumberFormat.currency().format(12000)),
+                ),
+                const Gap(8),
+              ],
+            ),
+          ),
+
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              top: 16,
+              bottom: 8,
+            ),
+            child: Text(
+              'Daftar transaksi',
+              style: context.textTheme.titleMedium,
+            ),
+          ),
 
           // transactions
           ListView.builder(
