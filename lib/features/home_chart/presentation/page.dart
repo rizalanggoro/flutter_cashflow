@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cashflow/core/utils/extensions.dart';
+import 'package:cashflow/shared/enums/transaction_range_filter.dart';
+import 'package:cashflow/shared/presentation/providers/selected_transaction_range_filter.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -35,7 +37,12 @@ class HomeChartPage extends HookConsumerWidget {
                   child: Column(
                     children: [
                       Text(
-                        'Harian',
+                        switch (
+                            ref.watch(selectedTransactionRangeFilterProvider)) {
+                          TransactionRangeFilter.yearly => 'Tahunan',
+                          TransactionRangeFilter.monthly => 'Bulanan',
+                          TransactionRangeFilter.daily => 'Harian',
+                        },
                         style: context.textTheme.titleMedium,
                       ),
                       Text(

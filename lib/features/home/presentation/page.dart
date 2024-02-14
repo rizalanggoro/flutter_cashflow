@@ -1,10 +1,12 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cashflow/core/utils/extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/router/router.gr.dart';
+import '../../../core/utils/extensions.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../shared/presentation/widgets/bottom_sheets/transaction_filter.dart';
 import '../domain/entities/navigation_item.dart';
 
 @RoutePage()
@@ -55,11 +57,12 @@ class HomePage extends HookConsumerWidget {
                 Text(
                   navigationItems[tabsRouter.activeIndex].title,
                 ),
+                if (tabsRouter.activeIndex < 3) const Gap(2),
                 if (tabsRouter.activeIndex < 3)
                   ref.watch(selectedWalletProvider).maybeWhen(
                       data: (data) => Text(
                             data?.name ?? 'Tidak ada dompet',
-                            style: context.textTheme.bodyMedium,
+                            style: context.textTheme.bodySmall,
                           ),
                       orElse: () => const SizedBox())
               ],
@@ -68,7 +71,14 @@ class HomePage extends HookConsumerWidget {
                 ? [
                     if (tabsRouter.activeIndex > 0)
                       IconButton(
-                        onPressed: () {},
+                        onPressed: () => showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          useSafeArea: true,
+                          showDragHandle: true,
+                          builder: (context) =>
+                              const BottomSheetTransactionFilter(),
+                        ),
                         icon: const Icon(Icons.sort_rounded),
                       ),
                     IconButton(
