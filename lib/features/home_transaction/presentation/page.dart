@@ -186,6 +186,7 @@ class HomeTransactionPage extends HookConsumerWidget {
                   (r) => r.isEmpty
                       ? const EmptyContainer()
                       : ListView.builder(
+                          padding: const EdgeInsets.only(bottom: 56 + 32),
                           itemBuilder: (context, index) {
                             final transaction = r[index];
                             final category = transaction.category.value;
