@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -27,6 +29,28 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
 
     // if wallet not found, then read first wallet
     selectedWallet ??= await _readFirstWallet();
+
+    // subscribe to selected wallet
+    if (selectedWallet != null) {
+      final subscription = ref
+          .watch(isarProvider)
+          .instance
+          .walletModels
+          .where()
+          .idEqualTo(selectedWallet.id)
+          .watchLazy()
+          .listen((event) async {
+        state = const AsyncValue.loading();
+        state = AsyncValue.data(await ref
+            .watch(isarProvider)
+            .instance
+            .walletModels
+            .get(selectedWallet!.id));
+      });
+
+      // dispose subscription
+      ref.onDispose(() => subscription.cancel());
+    }
 
     return selectedWallet;
   }
