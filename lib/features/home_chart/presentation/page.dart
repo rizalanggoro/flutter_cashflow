@@ -9,6 +9,13 @@ import 'package:intl/intl.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/enums/transaction_range_filter.dart';
 import '../../../shared/presentation/providers/selected_transaction_range_filter.dart';
+import '../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../shared/presentation/widgets/empty_container.dart';
+import '../../../shared/presentation/widgets/failure_container.dart';
+import '../../../shared/presentation/widgets/loading_container.dart';
+import '../domain/usecases/read_daily_transactions_chart.dart';
+import '../domain/usecases/read_monthly_transactions_chart.dart';
+import '../domain/usecases/read_yearly_transactions_chart.dart';
 
 @RoutePage()
 class HomeChartPage extends HookConsumerWidget {
@@ -25,6 +32,36 @@ class HomeChartPage extends HookConsumerWidget {
     final dailyDate = useState(DateTime.now());
     final monthlyDate = useState(DateTime.now());
     final yearlyDate = useState(DateTime.now());
+
+    // future
+    final chartSnapshot = useFuture(switch (selectedTransactionRangeFilter) {
+      TransactionRangeFilter.yearly => useMemoized(
+          () => ref.watch(readYearlyTransactionsChartProvider).call(
+                wallet: ref.watch(selectedWalletProvider).value,
+                dateTime: yearlyDate.value,
+              ),
+          [ref.watch(selectedWalletProvider), yearlyDate.value],
+        ),
+      TransactionRangeFilter.monthly => useMemoized(
+          () => ref.watch(readMonthlyTransactionsChartProvider).call(
+                wallet: ref.watch(selectedWalletProvider).value,
+                dateTime: monthlyDate.value,
+              ),
+          [ref.watch(selectedWalletProvider), monthlyDate.value],
+        ),
+      TransactionRangeFilter.daily => useMemoized(
+          () => ref.watch(readDailyTransactionsChartProvider).call(
+                wallet: ref.watch(selectedWalletProvider).value,
+                dateTime: dailyDate.value,
+              ),
+          [ref.watch(selectedWalletProvider), dailyDate.value],
+        ),
+    });
+
+    // chartSnapshot.data?.fold(
+    //     (l) => null,
+    //     (r) => print(r.map(
+    //         (e) => '${e.dateTime} - ${e.totalIncome} - ${e.totalExpense}')));
 
     return SingleChildScrollView(
       child: Column(
@@ -122,106 +159,139 @@ class HomeChartPage extends HookConsumerWidget {
             ),
             child: AspectRatio(
               aspectRatio: 12 / 7,
-              child: BarChart(
-                BarChartData(
-                  barTouchData: BarTouchData(
-                    enabled: true,
-                    handleBuiltInTouches: false,
-                    touchCallback: (_, response) {
-                      final groupIndex = response?.spot?.touchedBarGroupIndex;
-                      if (groupIndex != null) {
-                        selectedBarChartIndex.value = groupIndex;
-                      }
-                    },
-                  ),
-                  gridData: const FlGridData(drawVerticalLine: false),
-                  borderData: FlBorderData(
-                    show: false,
-                  ),
-                  titlesData: FlTitlesData(
-                    topTitles: const AxisTitles(),
-                    rightTitles: const AxisTitles(),
-                    leftTitles: const AxisTitles(),
-                    bottomTitles: AxisTitles(
-                      sideTitles: SideTitles(
-                        showTitles: true,
-                        getTitlesWidget: (value, meta) {
-                          var title = '';
+              child: switch (chartSnapshot.connectionState) {
+                ConnectionState.waiting => LoadingContainer(),
+                ConnectionState.done => chartSnapshot.data?.fold(
+                        (l) => FailureContainer(message: l.message),
+                        (r) => BarChart(
+                              BarChartData(
+                                barTouchData: BarTouchData(
+                                  enabled: true,
+                                  handleBuiltInTouches: false,
+                                  touchCallback: (_, response) {
+                                    final groupIndex =
+                                        response?.spot?.touchedBarGroupIndex;
+                                    if (groupIndex != null) {
+                                      selectedBarChartIndex.value = groupIndex;
+                                    }
+                                  },
+                                ),
+                                gridData: const FlGridData(
+                                  drawVerticalLine: false,
+                                ),
+                                borderData: FlBorderData(
+                                  show: false,
+                                ),
+                                titlesData: FlTitlesData(
+                                  topTitles: const AxisTitles(),
+                                  rightTitles: const AxisTitles(),
+                                  leftTitles: const AxisTitles(),
+                                  bottomTitles: AxisTitles(
+                                    sideTitles: SideTitles(
+                                      showTitles: true,
+                                      getTitlesWidget: (value, meta) {
+                                        var title = '';
 
-                          if (selectedTransactionRangeFilter.isDaily) {
-                            final currentDate = dailyDate.value;
-                            final currentWeekday = currentDate.weekday;
-                            title = DateFormat.E().format(
-                              currentDate
-                                  .subtract(Duration(days: currentWeekday - 1))
-                                  .add(Duration(days: value.toInt())),
-                            );
-                          } else if (selectedTransactionRangeFilter.isMonthly) {
-                            final currentDate = monthlyDate.value;
-                            title = DateFormat.MMM().format(
-                              DateTime(
-                                currentDate.year,
-                                currentDate.month - 3 + value.toInt(),
+                                        if (selectedTransactionRangeFilter
+                                            .isDaily) {
+                                          // final currentDate = dailyDate.value;
+                                          // final currentWeekday =
+                                          //     currentDate.weekday;
+                                          // title = DateFormat.E().format(
+                                          //   currentDate
+                                          //       .subtract(Duration(
+                                          //           days: currentWeekday - 1))
+                                          //       .add(Duration(
+                                          //           days: value.toInt())),
+                                          // );
+                                          title = DateFormat.E().format(
+                                            r[value.toInt()].dateTime,
+                                          );
+                                        } else if (selectedTransactionRangeFilter
+                                            .isMonthly) {
+                                          // final currentDate = monthlyDate.value;
+                                          // title = DateFormat.MMM().format(
+                                          //   DateTime(
+                                          //     currentDate.year,
+                                          //     currentDate.month -
+                                          //         3 +
+                                          //         value.toInt(),
+                                          //   ),
+                                          // );
+                                          title = DateFormat.MMM().format(
+                                            r[value.toInt()].dateTime,
+                                          );
+                                        } else {
+                                          // final currentDate = yearlyDate.value;
+                                          // title = DateFormat.y().format(
+                                          //   DateTime(currentDate.year -
+                                          //       2 +
+                                          //       value.toInt()),
+                                          // );
+                                          title = DateFormat.y().format(
+                                            r[value.toInt()].dateTime,
+                                          );
+                                        }
+
+                                        return Text(
+                                          title.toLowerCase(),
+                                          style: context.textTheme.bodySmall,
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                barGroups: List.generate(
+                                  r.length,
+                                  (index) {
+                                    final chartData = r[index];
+                                    final isSelected =
+                                        index == selectedBarChartIndex.value;
+
+                                    return BarChartGroupData(
+                                      x: index,
+                                      barRods: [
+                                        BarChartRodData(
+                                          toY: chartData.totalIncome,
+                                          width: 16,
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          color: isSelected
+                                              ? context.colorScheme.primary
+                                                  .withOpacity(.32)
+                                              : context.colorScheme.primary,
+                                          borderSide: BorderSide(
+                                            color: isSelected
+                                                ? context.colorScheme.primary
+                                                : Colors.transparent,
+                                          ),
+                                        ),
+                                        BarChartRodData(
+                                            toY: chartData.totalExpense,
+                                            width: 16,
+                                            borderRadius:
+                                                BorderRadius.circular(4),
+                                            color: isSelected
+                                                ? context.colorScheme
+                                                    .primaryContainer
+                                                    .withOpacity(.32)
+                                                : context.colorScheme
+                                                    .primaryContainer,
+                                            borderSide: BorderSide(
+                                              color: isSelected
+                                                  ? context.colorScheme
+                                                      .primaryContainer
+                                                  : Colors.transparent,
+                                            )),
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
-                            );
-                          } else {
-                            final currentDate = yearlyDate.value;
-                            title = DateFormat.y().format(
-                              DateTime(currentDate.year - 2 + value.toInt()),
-                            );
-                          }
-
-                          return Text(title);
-                        },
-                      ),
-                    ),
-                  ),
-                  barGroups: [
-                    ...List.generate(
-                      selectedTransactionRangeFilter.isDaily
-                          ? 7
-                          : selectedTransactionRangeFilter.isMonthly
-                              ? 4
-                              : 3,
-                      (index) {
-                        final isSelected = index == selectedBarChartIndex.value;
-
-                        return BarChartGroupData(
-                          x: index,
-                          barRods: [
-                            BarChartRodData(
-                              toY: 10 * (index + 1),
-                              width: 16,
-                              borderRadius: BorderRadius.circular(4),
-                              color: isSelected
-                                  ? context.colorScheme.primary.withOpacity(.32)
-                                  : context.colorScheme.primary,
-                              borderSide: BorderSide(
-                                color: isSelected
-                                    ? context.colorScheme.primary
-                                    : Colors.transparent,
-                              ),
-                            ),
-                            BarChartRodData(
-                                toY: 3 * (index + 2),
-                                width: 16,
-                                borderRadius: BorderRadius.circular(4),
-                                color: isSelected
-                                    ? context.colorScheme.primaryContainer
-                                        .withOpacity(.32)
-                                    : context.colorScheme.primaryContainer,
-                                borderSide: BorderSide(
-                                  color: isSelected
-                                      ? context.colorScheme.primaryContainer
-                                      : Colors.transparent,
-                                )),
-                          ],
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
+                            )) ??
+                    EmptyContainer(),
+                _ => EmptyContainer(),
+              },
             ),
           ),
           Container(

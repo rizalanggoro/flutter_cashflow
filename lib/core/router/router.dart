@@ -27,10 +27,13 @@ class MyRouter extends $MyRouter {
           children: [
             AutoRoute(
               page: HomeDashboardRoute.page,
-              initial: true,
+              // initial: true,
             ),
             AutoRoute(page: HomeTransactionRoute.page),
-            AutoRoute(page: HomeChartRoute.page),
+            AutoRoute(
+              page: HomeChartRoute.page,
+              initial: true,
+            ),
             AutoRoute(page: HomeSettingRoute.page),
           ],
         ),
