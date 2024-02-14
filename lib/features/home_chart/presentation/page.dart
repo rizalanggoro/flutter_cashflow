@@ -194,40 +194,15 @@ class HomeChartPage extends HookConsumerWidget {
 
                                         if (selectedTransactionRangeFilter
                                             .isDaily) {
-                                          // final currentDate = dailyDate.value;
-                                          // final currentWeekday =
-                                          //     currentDate.weekday;
-                                          // title = DateFormat.E().format(
-                                          //   currentDate
-                                          //       .subtract(Duration(
-                                          //           days: currentWeekday - 1))
-                                          //       .add(Duration(
-                                          //           days: value.toInt())),
-                                          // );
                                           title = DateFormat.E().format(
                                             r[value.toInt()].dateTime,
                                           );
                                         } else if (selectedTransactionRangeFilter
                                             .isMonthly) {
-                                          // final currentDate = monthlyDate.value;
-                                          // title = DateFormat.MMM().format(
-                                          //   DateTime(
-                                          //     currentDate.year,
-                                          //     currentDate.month -
-                                          //         3 +
-                                          //         value.toInt(),
-                                          //   ),
-                                          // );
                                           title = DateFormat.MMM().format(
                                             r[value.toInt()].dateTime,
                                           );
                                         } else {
-                                          // final currentDate = yearlyDate.value;
-                                          // title = DateFormat.y().format(
-                                          //   DateTime(currentDate.year -
-                                          //       2 +
-                                          //       value.toInt()),
-                                          // );
                                           title = DateFormat.y().format(
                                             r[value.toInt()].dateTime,
                                           );
