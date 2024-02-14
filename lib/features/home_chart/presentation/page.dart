@@ -160,7 +160,7 @@ class HomeChartPage extends HookConsumerWidget {
             child: AspectRatio(
               aspectRatio: 12 / 7,
               child: switch (chartSnapshot.connectionState) {
-                ConnectionState.waiting => LoadingContainer(),
+                ConnectionState.waiting => const LoadingContainer(),
                 ConnectionState.done => chartSnapshot.data?.fold(
                         (l) => FailureContainer(message: l.message),
                         (r) => BarChart(
@@ -264,8 +264,8 @@ class HomeChartPage extends HookConsumerWidget {
                                 ),
                               ),
                             )) ??
-                    EmptyContainer(),
-                _ => EmptyContainer(),
+                    const EmptyContainer(),
+                _ => const EmptyContainer(),
               },
             ),
           ),
