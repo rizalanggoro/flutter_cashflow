@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +25,8 @@ class HomeChartPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    log('build: home chart page');
+
     // global state
     final selectedTransactionRangeFilter =
         ref.watch(selectedTransactionRangeFilterProvider);
@@ -57,11 +61,6 @@ class HomeChartPage extends HookConsumerWidget {
           [ref.watch(selectedWalletProvider), dailyDate.value],
         ),
     });
-
-    // chartSnapshot.data?.fold(
-    //     (l) => null,
-    //     (r) => print(r.map(
-    //         (e) => '${e.dateTime} - ${e.totalIncome} - ${e.totalExpense}')));
 
     return SingleChildScrollView(
       child: Column(
@@ -189,30 +188,21 @@ class HomeChartPage extends HookConsumerWidget {
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      getTitlesWidget: (value, meta) {
-                                        var title = '';
-
-                                        if (selectedTransactionRangeFilter
-                                            .isDaily) {
-                                          title = DateFormat.E().format(
-                                            r[value.toInt()].dateTime,
-                                          );
-                                        } else if (selectedTransactionRangeFilter
-                                            .isMonthly) {
-                                          title = DateFormat.MMM().format(
-                                            r[value.toInt()].dateTime,
-                                          );
-                                        } else {
-                                          title = DateFormat.y().format(
-                                            r[value.toInt()].dateTime,
-                                          );
+                                      getTitlesWidget: (value, meta) => Text(
+                                        switch (selectedTransactionRangeFilter) {
+                                          TransactionRangeFilter.yearly =>
+                                            DateFormat.E().format(
+                                                r[value.toInt()].dateTime),
+                                          TransactionRangeFilter.monthly =>
+                                            DateFormat.MMM().format(
+                                                r[value.toInt()].dateTime),
+                                          TransactionRangeFilter.daily =>
+                                            DateFormat.y().format(
+                                                r[value.toInt()].dateTime),
                                         }
-
-                                        return Text(
-                                          title.toLowerCase(),
-                                          style: context.textTheme.bodySmall,
-                                        );
-                                      },
+                                            .toLowerCase(),
+                                        style: context.textTheme.bodySmall,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -287,17 +277,32 @@ class HomeChartPage extends HookConsumerWidget {
           Padding(
             padding: const EdgeInsets.only(
               left: 16,
+              right: 16,
               top: 8,
             ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  'Rincian statistik',
-                  style: context.textTheme.titleMedium,
+                IconButton.outlined(
+                  onPressed: () {},
+                  icon: const Icon(Icons.chevron_left_rounded),
                 ),
-                Text(
-                  DateFormat.yMMMMEEEEd().format(DateTime.now()),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Rincian statistik',
+                      style: context.textTheme.titleMedium,
+                    ),
+                    Text(
+                      DateFormat.yMMMMEEEEd().format(DateTime.now()),
+                      style: context.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+                IconButton.outlined(
+                  onPressed: () {},
+                  icon: const Icon(Icons.chevron_right_rounded),
                 ),
               ],
             ),
