@@ -10,14 +10,11 @@ import 'package:intl/intl.dart';
 
 import '../../../core/utils/extensions.dart';
 import '../../../shared/enums/transaction_range_filter.dart';
-import '../../../shared/presentation/providers/selected_transaction_range_filter.dart';
-import '../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
-import '../../../shared/presentation/widgets/failure_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';
-import '../domain/usecases/read_daily_transactions_chart.dart';
-import '../domain/usecases/read_monthly_transactions_chart.dart';
-import '../domain/usecases/read_yearly_transactions_chart.dart';
+import 'providers/chart_data.dart';
+import 'providers/selected_date_range.dart';
 
 @RoutePage()
 class HomeChartPage extends HookConsumerWidget {
@@ -29,38 +26,10 @@ class HomeChartPage extends HookConsumerWidget {
 
     // global state
     final selectedTransactionRangeFilter =
-        ref.watch(selectedTransactionRangeFilterProvider);
+        ref.watch(selectedDateRangeFilterProvider);
 
     // local state
     final selectedBarChartIndex = useState(0);
-    final dailyDate = useState(DateTime.now());
-    final monthlyDate = useState(DateTime.now());
-    final yearlyDate = useState(DateTime.now());
-
-    // future
-    final chartSnapshot = useFuture(switch (selectedTransactionRangeFilter) {
-      TransactionRangeFilter.yearly => useMemoized(
-          () => ref.watch(readYearlyTransactionsChartProvider).call(
-                wallet: ref.watch(selectedWalletProvider).value,
-                dateTime: yearlyDate.value,
-              ),
-          [ref.watch(selectedWalletProvider), yearlyDate.value],
-        ),
-      TransactionRangeFilter.monthly => useMemoized(
-          () => ref.watch(readMonthlyTransactionsChartProvider).call(
-                wallet: ref.watch(selectedWalletProvider).value,
-                dateTime: monthlyDate.value,
-              ),
-          [ref.watch(selectedWalletProvider), monthlyDate.value],
-        ),
-      TransactionRangeFilter.daily => useMemoized(
-          () => ref.watch(readDailyTransactionsChartProvider).call(
-                wallet: ref.watch(selectedWalletProvider).value,
-                dateTime: dailyDate.value,
-              ),
-          [ref.watch(selectedWalletProvider), dailyDate.value],
-        ),
-    });
 
     return SingleChildScrollView(
       child: Column(
@@ -75,62 +44,42 @@ class HomeChartPage extends HookConsumerWidget {
             child: Row(
               children: [
                 IconButton.outlined(
-                  onPressed: () => _onTapChangeDateRange(
-                    isAdd: false,
-                    transactionRangeFilter: selectedTransactionRangeFilter,
-                    dailyDate: dailyDate,
-                    monthlyDate: monthlyDate,
-                    yearlyDate: yearlyDate,
-                  ),
+                  onPressed: () =>
+                      ref.read(selectedDateRangeProvider.notifier).previous(),
                   icon: const Icon(Icons.chevron_left_rounded),
                 ),
                 Expanded(
                   child: Column(
                     children: [
                       Text(
-                        switch (
-                            ref.watch(selectedTransactionRangeFilterProvider)) {
-                          TransactionRangeFilter.yearly => 'Tahunan',
-                          TransactionRangeFilter.monthly => 'Bulanan',
-                          TransactionRangeFilter.daily => 'Harian',
+                        switch (selectedTransactionRangeFilter) {
+                          DateRangeFilter.yearly => 'Tahunan',
+                          DateRangeFilter.monthly => 'Bulanan',
+                          DateRangeFilter.daily => 'Harian',
                         },
                         style: context.textTheme.titleMedium,
                       ),
                       Builder(builder: (context) {
-                        var startDate = '', endDate = '';
+                        String start = '', end = '';
+                        final firstDate =
+                            ref.read(firstSelectedDateRangeProvider);
+                        final lastDate =
+                            ref.read(lastSelectedDateRangeProvider);
 
-                        if (selectedTransactionRangeFilter.isDaily) {
-                          final currentWeekday = dailyDate.value.weekday;
-                          startDate = DateFormat.yMMMEd().format(
-                            dailyDate.value.subtract(
-                              Duration(days: currentWeekday - 1),
-                            ),
-                          );
-                          endDate = DateFormat.yMMMEd().format(
-                            dailyDate.value.add(
-                              Duration(days: 7 - currentWeekday),
-                            ),
-                          );
-                        } else if (selectedTransactionRangeFilter.isMonthly) {
-                          final currentDate = monthlyDate.value;
-                          startDate = DateFormat.yMMM().format(
-                            DateTime(currentDate.year, currentDate.month - 3),
-                          );
-                          endDate = DateFormat.yMMM().format(
-                            currentDate,
-                          );
-                        } else if (selectedTransactionRangeFilter.isYearly) {
-                          final currentDate = yearlyDate.value;
-                          startDate = DateFormat.y().format(
-                            DateTime(currentDate.year - 2),
-                          );
-                          endDate = DateFormat.y().format(
-                            currentDate,
-                          );
+                        switch (selectedTransactionRangeFilter) {
+                          case DateRangeFilter.yearly:
+                            start = DateFormat.y().format(firstDate);
+                            end = DateFormat.y().format(lastDate);
+                          case DateRangeFilter.monthly:
+                            start = DateFormat.yMMM().format(firstDate);
+                            end = DateFormat.yMMM().format(lastDate);
+                          case DateRangeFilter.daily:
+                            start = DateFormat.yMMMd().format(firstDate);
+                            end = DateFormat.yMMMd().format(lastDate);
                         }
 
                         return Text(
-                          '$startDate - $endDate',
+                          '$start - $end',
                           style: context.textTheme.bodySmall,
                         );
                       }),
@@ -138,13 +87,8 @@ class HomeChartPage extends HookConsumerWidget {
                   ),
                 ),
                 IconButton.outlined(
-                  onPressed: () => _onTapChangeDateRange(
-                    isAdd: true,
-                    transactionRangeFilter: selectedTransactionRangeFilter,
-                    dailyDate: dailyDate,
-                    monthlyDate: monthlyDate,
-                    yearlyDate: yearlyDate,
-                  ),
+                  onPressed: () =>
+                      ref.read(selectedDateRangeProvider.notifier).next(),
                   icon: const Icon(Icons.chevron_right_rounded),
                 ),
               ],
@@ -158,105 +102,94 @@ class HomeChartPage extends HookConsumerWidget {
             ),
             child: AspectRatio(
               aspectRatio: 12 / 7,
-              child: switch (chartSnapshot.connectionState) {
-                ConnectionState.waiting => const LoadingContainer(),
-                ConnectionState.done => chartSnapshot.data?.fold(
-                        (l) => FailureContainer(message: l.message),
-                        (r) => BarChart(
-                              BarChartData(
-                                barTouchData: BarTouchData(
-                                  enabled: true,
-                                  handleBuiltInTouches: false,
-                                  touchCallback: (_, response) {
-                                    final groupIndex =
-                                        response?.spot?.touchedBarGroupIndex;
-                                    if (groupIndex != null) {
-                                      selectedBarChartIndex.value = groupIndex;
-                                    }
-                                  },
-                                ),
-                                gridData: const FlGridData(
-                                  drawVerticalLine: false,
-                                ),
-                                borderData: FlBorderData(
-                                  show: false,
-                                ),
-                                titlesData: FlTitlesData(
-                                  topTitles: const AxisTitles(),
-                                  rightTitles: const AxisTitles(),
-                                  leftTitles: const AxisTitles(),
-                                  bottomTitles: AxisTitles(
-                                    sideTitles: SideTitles(
-                                      showTitles: true,
-                                      getTitlesWidget: (value, meta) => Text(
-                                        switch (selectedTransactionRangeFilter) {
-                                          TransactionRangeFilter.daily =>
-                                            DateFormat.E().format(
-                                                r[value.toInt()].dateTime),
-                                          TransactionRangeFilter.monthly =>
-                                            DateFormat.MMM().format(
-                                                r[value.toInt()].dateTime),
-                                          TransactionRangeFilter.yearly =>
-                                            DateFormat.y().format(
-                                                r[value.toInt()].dateTime),
-                                        }
-                                            .toLowerCase(),
-                                        style: context.textTheme.bodySmall,
-                                      ),
-                                    ),
+              child: ref.watch(chartDataProvider).maybeWhen(
+                    loading: () => const LoadingContainer(),
+                    data: (r) => BarChart(
+                      BarChartData(
+                        barTouchData: BarTouchData(
+                          enabled: true,
+                          handleBuiltInTouches: false,
+                          touchCallback: (_, response) {
+                            final groupIndex =
+                                response?.spot?.touchedBarGroupIndex;
+                            if (groupIndex != null) {
+                              selectedBarChartIndex.value = groupIndex;
+                            }
+                          },
+                        ),
+                        gridData: const FlGridData(
+                          drawVerticalLine: false,
+                        ),
+                        borderData: FlBorderData(
+                          show: false,
+                        ),
+                        titlesData: FlTitlesData(
+                          topTitles: const AxisTitles(),
+                          rightTitles: const AxisTitles(),
+                          leftTitles: const AxisTitles(),
+                          bottomTitles: AxisTitles(
+                            sideTitles: SideTitles(
+                              showTitles: true,
+                              getTitlesWidget: (value, meta) => Text(
+                                switch (selectedTransactionRangeFilter) {
+                                  DateRangeFilter.daily => DateFormat.E()
+                                      .format(r[value.toInt()].dateTime),
+                                  DateRangeFilter.monthly => DateFormat.MMM()
+                                      .format(r[value.toInt()].dateTime),
+                                  DateRangeFilter.yearly => DateFormat.y()
+                                      .format(r[value.toInt()].dateTime),
+                                }
+                                    .toLowerCase(),
+                                style: context.textTheme.bodySmall,
+                              ),
+                            ),
+                          ),
+                        ),
+                        barGroups: List.generate(
+                          r.length,
+                          (index) {
+                            final chartData = r[index];
+                            final isSelected =
+                                index == selectedBarChartIndex.value;
+
+                            return BarChartGroupData(
+                              x: index,
+                              barRods: [
+                                BarChartRodData(
+                                  toY: chartData.totalIncome,
+                                  width: 16,
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: isSelected
+                                      ? context.colorScheme.primary
+                                          .withOpacity(.32)
+                                      : context.colorScheme.primary,
+                                  borderSide: BorderSide(
+                                    color: isSelected
+                                        ? context.colorScheme.primary
+                                        : Colors.transparent,
                                   ),
                                 ),
-                                barGroups: List.generate(
-                                  r.length,
-                                  (index) {
-                                    final chartData = r[index];
-                                    final isSelected =
-                                        index == selectedBarChartIndex.value;
-
-                                    return BarChartGroupData(
-                                      x: index,
-                                      barRods: [
-                                        BarChartRodData(
-                                          toY: chartData.totalIncome,
-                                          width: 16,
-                                          borderRadius:
-                                              BorderRadius.circular(4),
-                                          color: isSelected
-                                              ? context.colorScheme.primary
-                                                  .withOpacity(.32)
-                                              : context.colorScheme.primary,
-                                          borderSide: BorderSide(
-                                            color: isSelected
-                                                ? context.colorScheme.primary
-                                                : Colors.transparent,
-                                          ),
-                                        ),
-                                        BarChartRodData(
-                                            toY: chartData.totalExpense,
-                                            width: 16,
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                            color: isSelected
-                                                ? context.colorScheme
-                                                    .primaryContainer
-                                                    .withOpacity(.32)
-                                                : context.colorScheme
-                                                    .primaryContainer,
-                                            borderSide: BorderSide(
-                                              color: isSelected
-                                                  ? context.colorScheme
-                                                      .primaryContainer
-                                                  : Colors.transparent,
-                                            )),
-                                      ],
-                                    );
-                                  },
-                                ),
-                              ),
-                            )) ??
-                    const EmptyContainer(),
-                _ => const EmptyContainer(),
-              },
+                                BarChartRodData(
+                                    toY: chartData.totalExpense,
+                                    width: 16,
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: isSelected
+                                        ? context.colorScheme.primaryContainer
+                                            .withOpacity(.32)
+                                        : context.colorScheme.primaryContainer,
+                                    borderSide: BorderSide(
+                                      color: isSelected
+                                          ? context.colorScheme.primaryContainer
+                                          : Colors.transparent,
+                                    )),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    orElse: () => const EmptyContainer(),
+                  ),
             ),
           ),
           Container(
@@ -421,32 +354,5 @@ class HomeChartPage extends HookConsumerWidget {
         ],
       ),
     );
-  }
-
-  void _onTapChangeDateRange({
-    required bool isAdd,
-    required TransactionRangeFilter transactionRangeFilter,
-    required ValueNotifier<DateTime> dailyDate,
-    required ValueNotifier<DateTime> monthlyDate,
-    required ValueNotifier<DateTime> yearlyDate,
-  }) {
-    switch (transactionRangeFilter) {
-      case TransactionRangeFilter.daily:
-        dailyDate.value = dailyDate.value.add(
-          Duration(days: isAdd ? 6 : -6),
-        );
-        break;
-
-      case TransactionRangeFilter.monthly:
-        final currentDate = monthlyDate.value;
-        monthlyDate.value = DateTime(
-            currentDate.year, currentDate.month + (4 * (isAdd ? 1 : -1)));
-        break;
-
-      case TransactionRangeFilter.yearly:
-        final currentDate = yearlyDate.value;
-        yearlyDate.value = DateTime(currentDate.year + (3 * (isAdd ? 1 : -1)));
-        break;
-    }
   }
 }

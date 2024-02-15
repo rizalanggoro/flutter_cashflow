@@ -17,7 +17,7 @@ class _UseCase {
 
   FutureUseCase<List<TransactionModel>> call({
     int? walletId,
-    required TransactionRangeFilter rangeFilter,
+    required DateRangeFilter rangeFilter,
     required DateTime dateTime,
   }) async {
     try {

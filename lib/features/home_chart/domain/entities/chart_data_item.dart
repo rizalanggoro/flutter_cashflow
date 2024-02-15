@@ -1,8 +1,8 @@
-class TransactionsChartItem {
+class ChartDataItem {
   final double totalIncome, totalExpense;
   final DateTime dateTime;
 
-  TransactionsChartItem({
+  ChartDataItem({
     required this.totalIncome,
     required this.totalExpense,
     required this.dateTime,

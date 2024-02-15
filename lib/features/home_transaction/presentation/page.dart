@@ -11,7 +11,7 @@ import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/enums/category_type.dart';
 import '../../../shared/enums/transaction_range_filter.dart';
-import '../../../shared/presentation/providers/selected_transaction_range_filter.dart';
+import '../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/failure_container.dart';
@@ -28,7 +28,7 @@ class HomeTransactionPage extends HookConsumerWidget {
 
     // global state
     final selectedTransactionRangeFilter =
-        ref.watch(selectedTransactionRangeFilterProvider);
+        ref.watch(selectedDateRangeFilterProvider);
 
     final yearlyDate = useState(DateTime.now());
     final monthlyDate = useState(DateTime.now());
@@ -41,9 +41,9 @@ class HomeTransactionPage extends HookConsumerWidget {
               walletId: ref.watch(selectedWalletProvider).value?.id,
               rangeFilter: selectedTransactionRangeFilter,
               dateTime: switch (selectedTransactionRangeFilter) {
-                TransactionRangeFilter.yearly => yearlyDate.value,
-                TransactionRangeFilter.monthly => monthlyDate.value,
-                TransactionRangeFilter.daily => dailyDate.value,
+                DateRangeFilter.yearly => yearlyDate.value,
+                DateRangeFilter.monthly => monthlyDate.value,
+                DateRangeFilter.daily => dailyDate.value,
               },
             ),
         [
@@ -92,21 +92,21 @@ class HomeTransactionPage extends HookConsumerWidget {
               IconButton.outlined(
                 onPressed: () {
                   switch (selectedTransactionRangeFilter) {
-                    case TransactionRangeFilter.yearly:
+                    case DateRangeFilter.yearly:
                       yearlyDate.value = _changeDate(
                         isAdd: false,
                         current: yearlyDate.value,
                         rangeFilter: selectedTransactionRangeFilter,
                       );
                       break;
-                    case TransactionRangeFilter.monthly:
+                    case DateRangeFilter.monthly:
                       monthlyDate.value = _changeDate(
                         isAdd: false,
                         current: monthlyDate.value,
                         rangeFilter: selectedTransactionRangeFilter,
                       );
                       break;
-                    case TransactionRangeFilter.daily:
+                    case DateRangeFilter.daily:
                       dailyDate.value = _changeDate(
                         isAdd: false,
                         current: dailyDate.value,
@@ -121,24 +121,24 @@ class HomeTransactionPage extends HookConsumerWidget {
                 children: [
                   Text(
                     switch (selectedTransactionRangeFilter) {
-                      TransactionRangeFilter.yearly => 'Tahunan',
-                      TransactionRangeFilter.monthly => 'Bulanan',
-                      TransactionRangeFilter.daily => 'Harian',
+                      DateRangeFilter.yearly => 'Tahunan',
+                      DateRangeFilter.monthly => 'Bulanan',
+                      DateRangeFilter.daily => 'Harian',
                     },
                     style: context.textTheme.titleMedium,
                   ),
                   Text(
                     DateFormat(
                       switch (selectedTransactionRangeFilter) {
-                        TransactionRangeFilter.yearly => 'yyyy',
-                        TransactionRangeFilter.monthly => 'MMMM, yyyy',
-                        TransactionRangeFilter.daily => 'EEEE, d MMMM yyyy',
+                        DateRangeFilter.yearly => 'yyyy',
+                        DateRangeFilter.monthly => 'MMMM, yyyy',
+                        DateRangeFilter.daily => 'EEEE, d MMMM yyyy',
                       },
                     ).format(
                       switch (selectedTransactionRangeFilter) {
-                        TransactionRangeFilter.yearly => yearlyDate.value,
-                        TransactionRangeFilter.monthly => monthlyDate.value,
-                        TransactionRangeFilter.daily => dailyDate.value,
+                        DateRangeFilter.yearly => yearlyDate.value,
+                        DateRangeFilter.monthly => monthlyDate.value,
+                        DateRangeFilter.daily => dailyDate.value,
                       },
                     ),
                     style: context.textTheme.bodySmall,
@@ -148,21 +148,21 @@ class HomeTransactionPage extends HookConsumerWidget {
               IconButton.outlined(
                 onPressed: () {
                   switch (selectedTransactionRangeFilter) {
-                    case TransactionRangeFilter.yearly:
+                    case DateRangeFilter.yearly:
                       yearlyDate.value = _changeDate(
                         isAdd: true,
                         current: yearlyDate.value,
                         rangeFilter: selectedTransactionRangeFilter,
                       );
                       break;
-                    case TransactionRangeFilter.monthly:
+                    case DateRangeFilter.monthly:
                       monthlyDate.value = _changeDate(
                         isAdd: true,
                         current: monthlyDate.value,
                         rangeFilter: selectedTransactionRangeFilter,
                       );
                       break;
-                    case TransactionRangeFilter.daily:
+                    case DateRangeFilter.daily:
                       dailyDate.value = _changeDate(
                         isAdd: true,
                         current: dailyDate.value,
@@ -236,17 +236,17 @@ class HomeTransactionPage extends HookConsumerWidget {
   DateTime _changeDate({
     required bool isAdd,
     required DateTime current,
-    required TransactionRangeFilter rangeFilter,
+    required DateRangeFilter rangeFilter,
   }) =>
       switch (rangeFilter) {
-        TransactionRangeFilter.yearly => DateTime(
+        DateRangeFilter.yearly => DateTime(
             isAdd ? current.year + 1 : current.year - 1,
           ),
-        TransactionRangeFilter.monthly => DateTime(
+        DateRangeFilter.monthly => DateTime(
             current.year,
             isAdd ? current.month + 1 : current.month - 1,
           ),
-        TransactionRangeFilter.daily => DateTime(
+        DateRangeFilter.daily => DateTime(
             current.year,
             current.month,
             isAdd ? current.day + 1 : current.day - 1,

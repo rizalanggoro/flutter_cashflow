@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../domain/entities/transaction_range_filter_item.dart';
 import '../../../enums/transaction_range_filter.dart';
-import '../../providers/selected_transaction_range_filter.dart';
+import '../../providers/selected_date_range_filter.dart';
 
 class BottomSheetTransactionFilter extends HookConsumerWidget {
   const BottomSheetTransactionFilter({super.key});
@@ -41,24 +41,23 @@ class BottomSheetTransactionFilter extends HookConsumerWidget {
           ...[
             TransactionRangeFilterItem(
               title: 'Tahunan',
-              transactionRangeFilter: TransactionRangeFilter.yearly,
+              transactionRangeFilter: DateRangeFilter.yearly,
             ),
             TransactionRangeFilterItem(
               title: 'Bulanan',
-              transactionRangeFilter: TransactionRangeFilter.monthly,
+              transactionRangeFilter: DateRangeFilter.monthly,
             ),
             TransactionRangeFilterItem(
               title: 'Harian',
-              transactionRangeFilter: TransactionRangeFilter.daily,
+              transactionRangeFilter: DateRangeFilter.daily,
             ),
           ].map((e) => RadioListTile(
                 value: e.transactionRangeFilter,
-                groupValue: ref.watch(selectedTransactionRangeFilterProvider),
+                groupValue: ref.watch(selectedDateRangeFilterProvider),
                 onChanged: (value) {
                   if (value != null) {
-                    ref
-                        .read(selectedTransactionRangeFilterProvider.notifier)
-                        .state = value;
+                    ref.read(selectedDateRangeFilterProvider.notifier).state =
+                        value;
                   }
                 },
                 title: Text(e.title),

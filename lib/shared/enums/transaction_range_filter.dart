@@ -1,11 +1,11 @@
-enum TransactionRangeFilter {
+enum DateRangeFilter {
   yearly,
   monthly,
   daily,
 }
 
-extension XTransactionRangeFilter on TransactionRangeFilter {
-  bool get isYearly => this == TransactionRangeFilter.yearly;
-  bool get isMonthly => this == TransactionRangeFilter.monthly;
-  bool get isDaily => this == TransactionRangeFilter.daily;
+extension XDateRangeFilter on DateRangeFilter {
+  bool get isYearly => this == DateRangeFilter.yearly;
+  bool get isMonthly => this == DateRangeFilter.monthly;
+  bool get isDaily => this == DateRangeFilter.daily;
 }
