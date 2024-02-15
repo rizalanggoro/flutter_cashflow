@@ -2,26 +2,21 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
-import 'selected_date_range.dart';
+import 'selected_chart_date_range.dart';
 
-final firstSelectedDateRangeProvider = Provider<DateTime>((ref) {
-  final currentDate = ref.watch(selectedDateRangeProvider);
+final selectedLastChartDateRangeProvider = Provider<DateTime>((ref) {
+  final currentDate = ref.watch(selectedChartDateRangeProvider);
 
   switch (ref.watch(selectedDateRangeFilterProvider)) {
     case DateRangeFilter.yearly:
-      return DateTime(
-        currentDate.year - 2,
-      );
+      return currentDate;
     case DateRangeFilter.monthly:
-      return DateTime(
-        currentDate.year,
-        currentDate.month - 3,
-      );
+      return currentDate;
     case DateRangeFilter.daily:
       return DateTime(
         currentDate.year,
         currentDate.month,
-        currentDate.day - currentDate.weekday + 1,
+        currentDate.day + (7 - currentDate.weekday),
       );
   }
 });

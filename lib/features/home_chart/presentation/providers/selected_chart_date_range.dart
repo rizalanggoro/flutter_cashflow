@@ -3,50 +3,53 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
 
-class SelectedDetailDateNotifier extends Notifier<DateTime> {
+class SelectedChartDateRangeNotifier extends Notifier<DateTime> {
   @override
   DateTime build() {
-    return switch (ref.watch(selectedDateRangeFilterProvider)) {
+    final dateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
+
+    final currentDate = DateTime.now();
+    return switch (dateRangeFilter) {
       DateRangeFilter.yearly => DateTime(
-          DateTime.now().year,
+          currentDate.year,
         ),
       DateRangeFilter.monthly => DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
+          currentDate.year,
+          currentDate.month,
         ),
       DateRangeFilter.daily => DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
+          currentDate.year,
+          currentDate.month,
+          currentDate.day,
         ),
     };
   }
 
   void next() => _changeDate(true);
-  void prev() => _changeDate(false);
+  void previous() => _changeDate(false);
 
   void _changeDate(bool isAdd) {
     switch (ref.read(selectedDateRangeFilterProvider)) {
       case DateRangeFilter.yearly:
         state = DateTime(
-          state.year + (isAdd ? 1 : -1),
+          state.year + (3 * (isAdd ? 1 : -1)),
         );
       case DateRangeFilter.monthly:
         state = DateTime(
           state.year,
-          state.month + (isAdd ? 1 : -1),
+          state.month + (4 * (isAdd ? 1 : -1)),
         );
       case DateRangeFilter.daily:
         state = DateTime(
           state.year,
           state.month,
-          state.day + (isAdd ? 1 : -1),
+          state.day + (7 * (isAdd ? 1 : -1)),
         );
     }
   }
 }
 
-final selectedDetailDateProvider =
-    NotifierProvider<SelectedDetailDateNotifier, DateTime>(
-  SelectedDetailDateNotifier.new,
+final selectedChartDateRangeProvider =
+    NotifierProvider<SelectedChartDateRangeNotifier, DateTime>(
+  SelectedChartDateRangeNotifier.new,
 );

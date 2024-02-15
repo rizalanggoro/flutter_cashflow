@@ -18,7 +18,7 @@ class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {
     final walletId = ref.watch(selectedWalletProvider).value?.id;
     if (walletId != null) {
       final dateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
-      final firstDate = ref.watch(firstSelectedDateRangeProvider);
+      final firstDate = ref.watch(selectedFirstChartDateRangeProvider);
 
       // read data
       return _read(
