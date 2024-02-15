@@ -1,4 +1,5 @@
-import 'package:cashflow/features/home_chart/presentation/providers/selected_chart_detail_date.dart';
+import 'dart:developer';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -10,12 +11,15 @@ import '../../../../shared/presentation/providers/selected_date_range_filter.dar
 import '../../../../shared/presentation/widgets/empty_container.dart';
 import '../../../../shared/presentation/widgets/loading_container.dart';
 import '../providers/providers.dart';
+import '../providers/selected_chart_detail_date.dart';
 
 class ChartView extends HookConsumerWidget {
   const ChartView({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    log('build: chart view');
+
     final selectedDateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
 
     return Column(
@@ -84,7 +88,7 @@ class ChartView extends HookConsumerWidget {
                           ),
                         ),
                         touchCallback: (event, response) {
-                          if (event is FlPanDownEvent) {
+                          if (event is FlTapUpEvent) {
                             final groupIndex =
                                 response?.spot?.touchedBarGroupIndex;
                             if (groupIndex != null) {
@@ -128,6 +132,9 @@ class ChartView extends HookConsumerWidget {
                         r.length,
                         (index) {
                           final chartData = r[index];
+                          final isSelected =
+                              ref.watch(selectedChartDetailDateProvider) ==
+                                  chartData.dateTime;
 
                           return BarChartGroupData(
                             x: index,
@@ -136,14 +143,21 @@ class ChartView extends HookConsumerWidget {
                                 toY: chartData.totalIncome,
                                 width: 16,
                                 borderRadius: BorderRadius.circular(4),
-                                color: context.colorScheme.primary,
+                                color: context.colorScheme.primary
+                                    .withOpacity(isSelected ? .32 : 1),
+                                borderSide: BorderSide(
+                                  color: context.colorScheme.primary,
+                                ),
                               ),
                               BarChartRodData(
-                                toY: chartData.totalExpense,
-                                width: 16,
-                                borderRadius: BorderRadius.circular(4),
-                                color: context.colorScheme.primaryContainer,
-                              ),
+                                  toY: chartData.totalExpense,
+                                  width: 16,
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: context.colorScheme.primaryContainer
+                                      .withOpacity(isSelected ? .32 : 1),
+                                  borderSide: BorderSide(
+                                    color: context.colorScheme.primaryContainer,
+                                  )),
                             ],
                           );
                         },
@@ -156,15 +170,20 @@ class ChartView extends HookConsumerWidget {
         ),
         Container(
           padding: const EdgeInsets.only(
-            left: 64,
-            right: 64,
+            left: 32,
+            right: 32,
             top: 16,
           ),
           alignment: Alignment.center,
-          child: Text(
-            'Tekan salah satu bar chart untuk melihat rincian statistik',
-            style: context.textTheme.bodySmall,
-            textAlign: TextAlign.center,
+          child: Column(
+            children: [
+              Text(
+                'Tekan salah satu bar chart untuk melihat rincian statistik. '
+                'Tahan untuk melihat statistik total pemasukan atau pengeluaran',
+                style: context.textTheme.bodySmall,
+                textAlign: TextAlign.center,
+              ),
+            ],
           ),
         ),
       ],

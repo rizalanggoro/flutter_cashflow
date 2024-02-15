@@ -6,7 +6,10 @@ import 'providers.dart';
 
 class SelectedChartDetailDateNotifier extends Notifier<DateTime?> {
   @override
-  DateTime? build() => null;
+  DateTime? build() {
+    ref.watch(selectedDateRangeFilterProvider);
+    return null;
+  }
 
   void next() => _changeDate(true);
   void previous() => _changeDate(false);

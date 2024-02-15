@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'providers/selected_chart_detail_date.dart';
 import 'widgets/chart_detail_view.dart';
 import 'widgets/chart_view.dart';
 
@@ -16,18 +17,29 @@ class HomeChartPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     log('build: home chart page');
 
-    return const SingleChildScrollView(
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ChartView(),
-          Gap(8),
+          const ChartView(),
+          const Gap(16),
 
-          Divider(),
-          ChartDetailView(),
+          Consumer(
+            builder: (context, ref, child) {
+              return switch (ref.watch(selectedChartDetailDateProvider)) {
+                DateTime() => const Column(
+                    children: [
+                      Divider(),
+                      ChartDetailView(),
+                    ],
+                  ),
+                null => Container(),
+              };
+            },
+          ),
 
           // spacer
-          Gap(56 + 32),
+          const Gap(56 + 32),
         ],
       ),
     );
