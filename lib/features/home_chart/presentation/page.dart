@@ -13,8 +13,7 @@ import '../../../shared/enums/transaction_range_filter.dart';
 import '../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';
-import 'providers/chart_data.dart';
-import 'providers/selected_date_range.dart';
+import 'providers/providers.dart';
 
 @RoutePage()
 class HomeChartPage extends HookConsumerWidget {
@@ -59,30 +58,7 @@ class HomeChartPage extends HookConsumerWidget {
                         },
                         style: context.textTheme.titleMedium,
                       ),
-                      Builder(builder: (context) {
-                        String start = '', end = '';
-                        final firstDate =
-                            ref.read(firstSelectedDateRangeProvider);
-                        final lastDate =
-                            ref.read(lastSelectedDateRangeProvider);
-
-                        switch (selectedTransactionRangeFilter) {
-                          case DateRangeFilter.yearly:
-                            start = DateFormat.y().format(firstDate);
-                            end = DateFormat.y().format(lastDate);
-                          case DateRangeFilter.monthly:
-                            start = DateFormat.yMMM().format(firstDate);
-                            end = DateFormat.yMMM().format(lastDate);
-                          case DateRangeFilter.daily:
-                            start = DateFormat.yMMMd().format(firstDate);
-                            end = DateFormat.yMMMd().format(lastDate);
-                        }
-
-                        return Text(
-                          '$start - $end',
-                          style: context.textTheme.bodySmall,
-                        );
-                      }),
+                      _dateRangeFilterSubtitle(),
                     ],
                   ),
                 ),
@@ -353,6 +329,36 @@ class HomeChartPage extends HookConsumerWidget {
           const Gap(56 + 32),
         ],
       ),
+    );
+  }
+
+  Widget _dateRangeFilterSubtitle() {
+    return HookConsumer(
+      builder: (context, ref, child) {
+        final selectedDateRangeFilter =
+            ref.watch(selectedDateRangeFilterProvider);
+
+        String start = '', end = '';
+        final firstDate = ref.read(firstSelectedDateRangeProvider);
+        final lastDate = ref.read(lastSelectedDateRangeProvider);
+
+        switch (selectedDateRangeFilter) {
+          case DateRangeFilter.yearly:
+            start = DateFormat.y().format(firstDate);
+            end = DateFormat.y().format(lastDate);
+          case DateRangeFilter.monthly:
+            start = DateFormat.yMMM().format(firstDate);
+            end = DateFormat.yMMM().format(lastDate);
+          case DateRangeFilter.daily:
+            start = DateFormat.yMMMd().format(firstDate);
+            end = DateFormat.yMMMd().format(lastDate);
+        }
+
+        return Text(
+          '$start - $end',
+          style: context.textTheme.bodySmall,
+        );
+      },
     );
   }
 }
