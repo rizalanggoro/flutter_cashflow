@@ -190,13 +190,13 @@ class HomeChartPage extends HookConsumerWidget {
                                       showTitles: true,
                                       getTitlesWidget: (value, meta) => Text(
                                         switch (selectedTransactionRangeFilter) {
-                                          TransactionRangeFilter.yearly =>
+                                          TransactionRangeFilter.daily =>
                                             DateFormat.E().format(
                                                 r[value.toInt()].dateTime),
                                           TransactionRangeFilter.monthly =>
                                             DateFormat.MMM().format(
                                                 r[value.toInt()].dateTime),
-                                          TransactionRangeFilter.daily =>
+                                          TransactionRangeFilter.yearly =>
                                             DateFormat.y().format(
                                                 r[value.toInt()].dateTime),
                                         }
