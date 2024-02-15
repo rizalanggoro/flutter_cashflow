@@ -1,3 +1,4 @@
+import 'package:cashflow/features/home_chart/presentation/providers/providers.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -10,7 +11,6 @@ import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_wallet.dart';
 import '../../domain/entities/chart_data_item.dart';
-import 'selected_date_range.dart';
 
 class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {
   @override
