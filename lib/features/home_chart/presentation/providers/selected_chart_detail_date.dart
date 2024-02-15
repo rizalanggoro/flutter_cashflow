@@ -2,51 +2,49 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
+import 'providers.dart';
 
-class SelectedChartDetailDateNotifier extends Notifier<DateTime> {
+class SelectedChartDetailDateNotifier extends Notifier<DateTime?> {
   @override
-  DateTime build() {
-    return switch (ref.watch(selectedDateRangeFilterProvider)) {
-      DateRangeFilter.yearly => DateTime(
-          DateTime.now().year,
-        ),
-      DateRangeFilter.monthly => DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-        ),
-      DateRangeFilter.daily => DateTime(
-          DateTime.now().year,
-          DateTime.now().month,
-          DateTime.now().day,
-        ),
-    };
-  }
+  DateTime? build() => null;
 
   void next() => _changeDate(true);
-  void prev() => _changeDate(false);
+  void previous() => _changeDate(false);
+  void change({required DateTime? dateTime}) =>
+      state = state == dateTime ? null : dateTime;
+  void reset() => state = null;
 
   void _changeDate(bool isAdd) {
-    switch (ref.read(selectedDateRangeFilterProvider)) {
-      case DateRangeFilter.yearly:
-        state = DateTime(
-          state.year + (isAdd ? 1 : -1),
-        );
-      case DateRangeFilter.monthly:
-        state = DateTime(
-          state.year,
-          state.month + (isAdd ? 1 : -1),
-        );
-      case DateRangeFilter.daily:
-        state = DateTime(
-          state.year,
-          state.month,
-          state.day + (isAdd ? 1 : -1),
-        );
+    if (state != null) {
+      final firstDate = ref.read(selectedFirstChartDateProvider);
+      final lastDate = ref.read(selectedLastChartDateProvider);
+
+      if ((!isAdd && firstDate == state) || (isAdd && lastDate == state)) {
+        return;
+      }
+
+      switch (ref.read(selectedDateRangeFilterProvider)) {
+        case DateRangeFilter.yearly:
+          state = DateTime(
+            state!.year + (isAdd ? 1 : -1),
+          );
+        case DateRangeFilter.monthly:
+          state = DateTime(
+            state!.year,
+            state!.month + (isAdd ? 1 : -1),
+          );
+        case DateRangeFilter.daily:
+          state = DateTime(
+            state!.year,
+            state!.month,
+            state!.day + (isAdd ? 1 : -1),
+          );
+      }
     }
   }
 }
 
 final selectedChartDetailDateProvider =
-    NotifierProvider<SelectedChartDetailDateNotifier, DateTime>(
+    NotifierProvider<SelectedChartDetailDateNotifier, DateTime?>(
   SelectedChartDetailDateNotifier.new,
 );

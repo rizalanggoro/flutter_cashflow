@@ -2,8 +2,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
+import 'selected_chart_detail_date.dart';
 
-class SelectedChartDateRangeNotifier extends Notifier<DateTime> {
+class SelectedChartDateNotifier extends Notifier<DateTime> {
   @override
   DateTime build() {
     final dateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
@@ -46,10 +47,13 @@ class SelectedChartDateRangeNotifier extends Notifier<DateTime> {
           state.day + (7 * (isAdd ? 1 : -1)),
         );
     }
+
+    // reset detail
+    ref.read(selectedChartDetailDateProvider.notifier).reset();
   }
 }
 
-final selectedChartDateRangeProvider =
-    NotifierProvider<SelectedChartDateRangeNotifier, DateTime>(
-  SelectedChartDateRangeNotifier.new,
+final selectedChartDateProvider =
+    NotifierProvider<SelectedChartDateNotifier, DateTime>(
+  SelectedChartDateNotifier.new,
 );

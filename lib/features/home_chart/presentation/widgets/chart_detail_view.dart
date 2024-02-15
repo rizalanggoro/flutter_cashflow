@@ -1,3 +1,4 @@
+import 'package:cashflow/features/home_chart/presentation/providers/providers.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -15,8 +16,8 @@ class ChartDetailView extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Divider(),
         Padding(
           padding: const EdgeInsets.only(
             left: 16,
@@ -26,10 +27,22 @@ class ChartDetailView extends HookConsumerWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton.outlined(
-                onPressed: () =>
-                    ref.read(selectedChartDetailDateProvider.notifier).prev(),
-                icon: const Icon(Icons.chevron_left_rounded),
+              Consumer(
+                builder: (context, ref, child) {
+                  final selectedDetailDate =
+                      ref.watch(selectedChartDetailDateProvider);
+                  final firstChartDate =
+                      ref.watch(selectedFirstChartDateProvider);
+
+                  return IconButton.outlined(
+                    onPressed: selectedDetailDate == firstChartDate
+                        ? null
+                        : () => ref
+                            .read(selectedChartDetailDateProvider.notifier)
+                            .previous(),
+                    icon: const Icon(Icons.chevron_left_rounded),
+                  );
+                },
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,27 +59,43 @@ class ChartDetailView extends HookConsumerWidget {
                           ref.watch(selectedChartDetailDateProvider);
 
                       return Text(
-                        switch (selectedDateRangeFilter) {
-                          DateRangeFilter.yearly => DateFormat.y().format(
-                              selectedDetailDate,
-                            ),
-                          DateRangeFilter.monthly => DateFormat.yMMMM().format(
-                              selectedDetailDate,
-                            ),
-                          DateRangeFilter.daily => DateFormat.yMMMEd().format(
-                              selectedDetailDate,
-                            ),
-                        },
+                        selectedDetailDate != null
+                            ? switch (selectedDateRangeFilter) {
+                                DateRangeFilter.yearly => DateFormat.y().format(
+                                    selectedDetailDate,
+                                  ),
+                                DateRangeFilter.monthly =>
+                                  DateFormat.yMMMM().format(
+                                    selectedDetailDate,
+                                  ),
+                                DateRangeFilter.daily =>
+                                  DateFormat.yMMMEd().format(
+                                    selectedDetailDate,
+                                  ),
+                              }
+                            : 'Tidak ada grafik dipilih!',
                         style: context.textTheme.bodySmall,
                       );
                     },
                   ),
                 ],
               ),
-              IconButton.outlined(
-                onPressed: () =>
-                    ref.read(selectedChartDetailDateProvider.notifier).next(),
-                icon: const Icon(Icons.chevron_right_rounded),
+              Consumer(
+                builder: (context, ref, child) {
+                  final selectedDetailDate =
+                      ref.watch(selectedChartDetailDateProvider);
+                  final lastChartDate =
+                      ref.watch(selectedLastChartDateProvider);
+
+                  return IconButton.outlined(
+                    onPressed: selectedDetailDate == lastChartDate
+                        ? null
+                        : () => ref
+                            .read(selectedChartDetailDateProvider.notifier)
+                            .next(),
+                    icon: const Icon(Icons.chevron_right_rounded),
+                  );
+                },
               ),
             ],
           ),

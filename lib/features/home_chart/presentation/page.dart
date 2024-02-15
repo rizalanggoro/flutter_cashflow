@@ -22,6 +22,8 @@ class HomeChartPage extends HookConsumerWidget {
         children: [
           ChartView(),
           Gap(8),
+
+          Divider(),
           ChartDetailView(),
 
           // spacer

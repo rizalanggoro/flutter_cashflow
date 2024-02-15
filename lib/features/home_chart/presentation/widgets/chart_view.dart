@@ -1,3 +1,4 @@
+import 'package:cashflow/features/home_chart/presentation/providers/selected_chart_detail_date.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -28,9 +29,8 @@ class ChartView extends HookConsumerWidget {
           child: Row(
             children: [
               IconButton.outlined(
-                onPressed: () => ref
-                    .read(selectedChartDateRangeProvider.notifier)
-                    .previous(),
+                onPressed: () =>
+                    ref.read(selectedChartDateProvider.notifier).previous(),
                 icon: const Icon(Icons.chevron_left_rounded),
               ),
               Expanded(
@@ -50,7 +50,7 @@ class ChartView extends HookConsumerWidget {
               ),
               IconButton.outlined(
                 onPressed: () =>
-                    ref.read(selectedChartDateRangeProvider.notifier).next(),
+                    ref.read(selectedChartDateProvider.notifier).next(),
                 icon: const Icon(Icons.chevron_right_rounded),
               ),
             ],
@@ -70,8 +70,31 @@ class ChartView extends HookConsumerWidget {
                     BarChartData(
                       barTouchData: BarTouchData(
                         enabled: true,
-                        handleBuiltInTouches: false,
-                        touchCallback: (_, response) {},
+                        handleBuiltInTouches: true,
+                        touchTooltipData: BarTouchTooltipData(
+                          tooltipPadding: const EdgeInsets.symmetric(
+                            vertical: 8,
+                            horizontal: 12,
+                          ),
+                          tooltipBgColor: context.colorScheme.surfaceVariant,
+                          getTooltipItem: (group, groupIndex, rod, rodIndex) =>
+                              BarTooltipItem(
+                            NumberFormat.currency().format(rod.toY),
+                            context.textTheme.bodySmall ?? const TextStyle(),
+                          ),
+                        ),
+                        touchCallback: (event, response) {
+                          if (event is FlPanDownEvent) {
+                            final groupIndex =
+                                response?.spot?.touchedBarGroupIndex;
+                            if (groupIndex != null) {
+                              ref
+                                  .read(
+                                      selectedChartDetailDateProvider.notifier)
+                                  .change(dateTime: r[groupIndex].dateTime);
+                            }
+                          }
+                        },
                       ),
                       gridData: const FlGridData(
                         drawVerticalLine: false,
@@ -105,7 +128,6 @@ class ChartView extends HookConsumerWidget {
                         r.length,
                         (index) {
                           final chartData = r[index];
-                          final isSelected = false;
 
                           return BarChartGroupData(
                             x: index,
@@ -114,29 +136,14 @@ class ChartView extends HookConsumerWidget {
                                 toY: chartData.totalIncome,
                                 width: 16,
                                 borderRadius: BorderRadius.circular(4),
-                                color: isSelected
-                                    ? context.colorScheme.primary
-                                        .withOpacity(.32)
-                                    : context.colorScheme.primary,
-                                borderSide: BorderSide(
-                                  color: isSelected
-                                      ? context.colorScheme.primary
-                                      : Colors.transparent,
-                                ),
+                                color: context.colorScheme.primary,
                               ),
                               BarChartRodData(
-                                  toY: chartData.totalExpense,
-                                  width: 16,
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: isSelected
-                                      ? context.colorScheme.primaryContainer
-                                          .withOpacity(.32)
-                                      : context.colorScheme.primaryContainer,
-                                  borderSide: BorderSide(
-                                    color: isSelected
-                                        ? context.colorScheme.primaryContainer
-                                        : Colors.transparent,
-                                  )),
+                                toY: chartData.totalExpense,
+                                width: 16,
+                                borderRadius: BorderRadius.circular(4),
+                                color: context.colorScheme.primaryContainer,
+                              ),
                             ],
                           );
                         },
@@ -171,8 +178,8 @@ class ChartView extends HookConsumerWidget {
             ref.watch(selectedDateRangeFilterProvider);
 
         String start = '', end = '';
-        final firstDate = ref.read(selectedFirstChartDateRangeProvider);
-        final lastDate = ref.read(selectedLastChartDateRangeProvider);
+        final firstDate = ref.read(selectedFirstChartDateProvider);
+        final lastDate = ref.read(selectedLastChartDateProvider);
 
         switch (selectedDateRangeFilter) {
           case DateRangeFilter.yearly:

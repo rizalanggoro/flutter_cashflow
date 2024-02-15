@@ -4,7 +4,6 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'core/application/application.dart';
-import 'core/application/riverpod_observer.dart';
 import 'shared/data/providers/isar.dart';
 import 'shared/data/providers/preferences.dart';
 
@@ -23,7 +22,7 @@ void main() async {
 
   runApp(
     ProviderScope(
-      observers: [MyRiverpodObserver()],
+      // observers: [MyRiverpodObserver()],
       overrides: [
         isarProvider.overrideWithValue(isar),
         preferencesProvider.overrideWithValue(preferences),
