@@ -26,6 +26,10 @@ class _UseCase {
         throw Failure(message: 'Tidak ada dompet dipilih!');
       }
 
+      if (amount <= 0) {
+        throw Failure(message: 'Nominal transaksi tidak valid!');
+      }
+
       final currentDate = DateTime.now();
       final transaction = TransactionModel()
         ..amount = amount
