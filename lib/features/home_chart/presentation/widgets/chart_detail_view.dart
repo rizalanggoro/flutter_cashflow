@@ -111,7 +111,7 @@ class ChartDetailView extends HookConsumerWidget {
           loading: () => const LoadingContainer(
             padding: EdgeInsets.symmetric(vertical: 64),
           ),
-          data: (data) => data == null
+          data: (data) => data == null || data.transactions.isEmpty
               ? const EmptyContainer(
                   padding: EdgeInsets.symmetric(vertical: 64),
                 )
