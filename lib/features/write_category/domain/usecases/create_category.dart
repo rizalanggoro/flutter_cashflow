@@ -6,7 +6,7 @@ import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/wallet.dart';
-import '../../../../shared/data/providers/isar.dart';
+import '../../../../shared/data/sources/isar.dart';
 import '../../../../shared/enums/category_type.dart';
 
 class _UseCase {
@@ -70,5 +70,5 @@ class _UseCase {
 
 // provider
 final createCategoryUseCaseProvider = Provider<_UseCase>((ref) {
-  return _UseCase(isar: ref.watch(isarProvider).instance);
+  return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });

@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../shared/data/providers/isar.dart';
+import '../../shared/data/sources/isar.dart';
 import 'guards/first_wallet.dart';
 import 'router.gr.dart';
 
@@ -21,7 +21,7 @@ class MyRouter extends $MyRouter {
           initial: true,
           guards: [
             FirstWalletGuard(
-              isar: ref.watch(isarProvider).instance,
+              isar: ref.watch(isarSourceProvider).instance,
             ),
           ],
           children: [

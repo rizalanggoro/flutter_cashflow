@@ -8,7 +8,7 @@ import '../../../../shared/constants/default_categories.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/models/wallet.dart';
-import '../../../../shared/data/providers/isar.dart';
+import '../../../../shared/data/sources/isar.dart';
 import '../../../../shared/enums/category_type.dart';
 
 class _UseCase {
@@ -104,5 +104,5 @@ class _UseCase {
 
 // provider
 final createWalletUseCaseProvider = Provider<_UseCase>((ref) {
-  return _UseCase(isar: ref.watch(isarProvider).instance);
+  return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });

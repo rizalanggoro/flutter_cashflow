@@ -1,14 +1,14 @@
 import 'dart:developer';
 
-import 'package:cashflow/shared/data/models/transaction.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../models/category.dart';
+import '../models/transaction.dart';
 import '../models/wallet.dart';
 
-class IsarProvider {
+class IsarSource {
   late Isar _isar;
 
   // getter
@@ -31,6 +31,6 @@ class IsarProvider {
 }
 
 // provider
-final isarProvider = Provider<IsarProvider>(
-  (ref) => IsarProvider(),
+final isarSourceProvider = Provider<IsarSource>(
+  (ref) => IsarSource(),
 );

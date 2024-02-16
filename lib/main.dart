@@ -4,18 +4,18 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'core/application/application.dart';
-import 'shared/data/providers/isar.dart';
-import 'shared/data/providers/preferences.dart';
+import 'shared/data/sources/isar.dart';
+import 'shared/data/sources/preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Intl.defaultLocale = 'id';
   initializeDateFormatting();
 
-  final isar = IsarProvider();
+  final isar = IsarSource();
   await isar.initialize();
 
-  final preferences = PreferencesProvider();
+  final preferences = PreferencesSource();
   await preferences.initialize();
 
   // await isar.instance.writeTxn(() => isar.instance.clear());
@@ -24,8 +24,8 @@ void main() async {
     ProviderScope(
       // observers: [MyRiverpodObserver()],
       overrides: [
-        isarProvider.overrideWithValue(isar),
-        preferencesProvider.overrideWithValue(preferences),
+        isarSourceProvider.overrideWithValue(isar),
+        preferencesSourceProvider.overrideWithValue(preferences),
       ],
       child: const MyApplication(),
     ),

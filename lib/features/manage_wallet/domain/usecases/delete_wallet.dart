@@ -7,7 +7,7 @@ import '../../../../core/utils/typedefs.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/models/wallet.dart';
-import '../../../../shared/data/providers/isar.dart';
+import '../../../../shared/data/sources/isar.dart';
 
 class _DeleteWalletUseCase {
   final Isar _isar;
@@ -49,5 +49,5 @@ class _DeleteWalletUseCase {
 
 // provider
 final deleteWalletUseCaseProvider = Provider<_DeleteWalletUseCase>((ref) {
-  return _DeleteWalletUseCase(isar: ref.watch(isarProvider).instance);
+  return _DeleteWalletUseCase(isar: ref.watch(isarSourceProvider).instance);
 });

@@ -4,7 +4,7 @@ import 'package:isar/isar.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/models/wallet.dart';
-import '../../../../shared/data/providers/isar.dart';
+import '../../../../shared/data/sources/isar.dart';
 import '../../../../shared/enums/category_type.dart';
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
@@ -13,7 +13,7 @@ import '../../domain/entities/chart_detail_data.dart';
 import 'selected_chart_detail_date.dart';
 
 final chartDetailDataProvider = FutureProvider<ChartDetailData?>((ref) async {
-  final isar = ref.watch(isarProvider).instance;
+  final isar = ref.watch(isarSourceProvider).instance;
   final walletId = ref.watch(selectedWalletProvider).value?.id;
   final dateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
   final date = ref.watch(selectedChartDetailDateProvider);

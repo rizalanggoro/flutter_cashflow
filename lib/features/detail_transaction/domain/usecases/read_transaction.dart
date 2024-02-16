@@ -5,7 +5,7 @@ import 'package:isar/isar.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../../../shared/data/models/transaction.dart';
-import '../../../../shared/data/providers/isar.dart';
+import '../../../../shared/data/sources/isar.dart';
 
 class _UseCase {
   final Isar _isar;
@@ -25,5 +25,5 @@ class _UseCase {
 
 // provider
 final readTransactionUseCaseProvider = Provider<_UseCase>((ref) {
-  return _UseCase(isar: ref.watch(isarProvider).instance);
+  return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });

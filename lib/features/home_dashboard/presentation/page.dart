@@ -11,7 +11,7 @@ import '../../../core/utils/extensions.dart';
 import '../../../shared/data/models/category.dart';
 import '../../../shared/data/models/transaction.dart';
 import '../../../shared/data/models/wallet.dart';
-import '../../../shared/data/providers/isar.dart';
+import '../../../shared/data/sources/isar.dart';
 import '../../../shared/enums/category_type.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
@@ -53,7 +53,7 @@ class HomeDashboardPage extends HookConsumerWidget {
                   ref.watch(selectedWalletProvider).value?.id;
               if (selectedWalletId != null) {
                 final totalIncomes = await ref
-                    .watch(isarProvider)
+                    .watch(isarSourceProvider)
                     .instance
                     .transactionModels
                     .filter()
@@ -63,7 +63,7 @@ class HomeDashboardPage extends HookConsumerWidget {
                     .sum();
                 print(totalIncomes);
                 final totalExpense = await ref
-                    .watch(isarProvider)
+                    .watch(isarSourceProvider)
                     .instance
                     .transactionModels
                     .filter()

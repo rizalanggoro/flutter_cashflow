@@ -4,7 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
-import '../../../shared/data/providers/isar.dart';
+import '../../../shared/data/sources/isar.dart';
 import '../../../shared/presentation/providers/expense_categories.dart';
 import '../../../shared/presentation/providers/income_categories.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
@@ -125,7 +125,7 @@ class HomeSettingPage extends HookConsumerWidget {
                     ),
                     TextButton(
                       onPressed: () {
-                        final isar = ref.watch(isarProvider).instance;
+                        final isar = ref.watch(isarSourceProvider).instance;
                         isar.writeTxn(() => isar.clear()).then(
                             (value) => context.router.replace(WriteWalletRoute(
                                   isCreateFirstWallet: true,

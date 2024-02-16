@@ -5,7 +5,7 @@ import 'package:isar/isar.dart';
 import '../../../core/failure/failure.dart';
 import '../../../core/utils/typedefs.dart';
 import '../../data/models/wallet.dart';
-import '../../data/providers/isar.dart';
+import '../../data/sources/isar.dart';
 
 class _UseCase {
   final Isar _isar;
@@ -23,5 +23,5 @@ class _UseCase {
 
 // provider
 final watchWalletsUseCaseProvider = Provider<_UseCase>((ref) {
-  return _UseCase(isar: ref.watch(isarProvider).instance);
+  return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });

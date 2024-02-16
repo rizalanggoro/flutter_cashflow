@@ -6,7 +6,7 @@ import '../../../core/failure/failure.dart';
 import '../../../core/utils/typedefs.dart';
 import '../../data/models/category.dart';
 import '../../data/models/wallet.dart';
-import '../../data/providers/isar.dart';
+import '../../data/sources/isar.dart';
 import '../../enums/category_type.dart';
 
 class _UseCase {
@@ -48,5 +48,5 @@ class _UseCase {
 
 // provider
 final readCategoriesUseCaseProvider = Provider<_UseCase>((ref) {
-  return _UseCase(isar: ref.watch(isarProvider).instance);
+  return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });

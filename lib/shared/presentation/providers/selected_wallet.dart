@@ -4,8 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../data/models/wallet.dart';
-import '../../data/providers/isar.dart';
-import '../../data/providers/preferences.dart';
+import '../../data/sources/isar.dart';
+import '../../data/sources/preferences.dart';
 
 // selected wallet
 const _prefSelectedWallet = 'selectedWallet';
@@ -15,13 +15,15 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
   Future<WalletModel?> build() async {
     WalletModel? selectedWallet;
 
-    final selectedWalletId =
-        ref.watch(preferencesProvider).instance.getInt(_prefSelectedWallet);
+    final selectedWalletId = ref
+        .watch(preferencesSourceProvider)
+        .instance
+        .getInt(_prefSelectedWallet);
 
     // read selected wallet by id
     if (selectedWalletId != null) {
       selectedWallet = await ref
-          .watch(isarProvider)
+          .watch(isarSourceProvider)
           .instance
           .walletModels
           .get(selectedWalletId);
@@ -33,7 +35,7 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
     // subscribe to selected wallet
     if (selectedWallet != null) {
       final subscription = ref
-          .watch(isarProvider)
+          .watch(isarSourceProvider)
           .instance
           .walletModels
           .where()
@@ -42,7 +44,7 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
           .listen((event) async {
         state = const AsyncValue.loading();
         state = AsyncValue.data(await ref
-            .watch(isarProvider)
+            .watch(isarSourceProvider)
             .instance
             .walletModels
             .get(selectedWallet!.id));
@@ -56,7 +58,7 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
   }
 
   Future<WalletModel?> _readFirstWallet() => ref
-      .watch(isarProvider)
+      .watch(isarSourceProvider)
       .instance
       .walletModels
       .where()
@@ -69,7 +71,7 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
 
   void change({required WalletModel wallet}) async {
     ref
-        .read(preferencesProvider)
+        .read(preferencesSourceProvider)
         .instance
         .setInt(_prefSelectedWallet, wallet.id)
         .then((value) {
