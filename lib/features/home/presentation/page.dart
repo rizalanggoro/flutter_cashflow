@@ -87,7 +87,7 @@ class HomePage extends HookConsumerWidget {
                         const SelectWalletRoute(),
                       ),
                     ),
-                    const SizedBox(width: 16),
+                    const Gap(16),
                   ]
                 : null,
           ),
@@ -109,10 +109,6 @@ class HomePage extends HookConsumerWidget {
                       context.router.push(const WriteTransactionRoute()),
                 )
               : null,
-          // body: IndexedStack(
-          //   index: selectedNavigationIndex.value,
-          //   children: navigationItems.map((e) => e.component).toList(),
-          // ),
           body: child,
         );
       },
