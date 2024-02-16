@@ -30,7 +30,7 @@ class ExpenseCategoriesNotifier extends AsyncNotifier<List<CategoryModel>> {
 
     final watchResult = ref.watch(watchCategoriesUseCaseProvider).call(
           walletId: ref.watch(selectedWalletProvider).value?.id,
-          categoryType: CategoryType.income,
+          categoryType: CategoryType.expense,
         );
 
     watchResult.fold(
