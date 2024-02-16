@@ -247,10 +247,12 @@ class ChartDetailView extends HookConsumerWidget {
                             ),
                           ),
                           title: Text(category?.name ?? 'Tidak ada kategori'),
-                          subtitle: Text(
-                            transaction.note,
-                            maxLines: 2,
-                          ),
+                          subtitle: transaction.note.isNotEmpty
+                              ? Text(
+                                  transaction.note,
+                                  maxLines: 2,
+                                )
+                              : null,
                           trailing: Text(
                             NumberFormat.compactCurrency().format(
                               transaction.amount,
