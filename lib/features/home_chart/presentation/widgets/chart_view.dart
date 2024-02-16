@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
@@ -177,6 +178,34 @@ class ChartView extends HookConsumerWidget {
           alignment: Alignment.center,
           child: Column(
             children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.circle_rounded,
+                    color: context.colorScheme.primary,
+                    size: context.textTheme.bodyMedium?.fontSize,
+                  ),
+                  const Gap(4),
+                  Text(
+                    'Pemasukan',
+                    style: context.textTheme.labelMedium,
+                  ),
+                  const Gap(16),
+                  Icon(
+                    Icons.circle_rounded,
+                    color: context.colorScheme.primaryContainer,
+                    size: context.textTheme.bodyMedium?.fontSize,
+                  ),
+                  const Gap(4),
+                  Text(
+                    'Pengeluaran',
+                    style: context.textTheme.labelMedium,
+                  ),
+                ],
+              ),
+              const Gap(8),
               Text(
                 'Tekan salah satu bar chart untuk melihat rincian statistik. '
                 'Tahan untuk melihat statistik total pemasukan atau pengeluaran',
