@@ -5,6 +5,7 @@ import 'package:isar/isar.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../../../shared/data/models/category.dart';
+import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/providers/isar.dart';
 
 class _UseCase {
@@ -17,14 +18,24 @@ class _UseCase {
   }) async {
     try {
       final result = await _isar.writeTxn(
-        () => _isar.categoryModels.delete(categoryId),
+        () async {
+          // delete transactions
+          await _isar.transactionModels
+              .filter()
+              .category((q) => q.idEqualTo(categoryId))
+              .deleteAll();
+
+          // delete category
+          final id = await _isar.categoryModels.delete(categoryId);
+
+          return id;
+        },
       );
       return Right(result);
     } catch (e) {
-      if (e is Failure) {
-        return Left(e);
-      }
-      return Left(Failure(message: e.toString()));
+      return Left(
+        e is Failure ? e : Failure(message: e.toString()),
+      );
     }
   }
 }
