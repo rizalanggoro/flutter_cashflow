@@ -22,8 +22,6 @@ class ChartDetailDataNotifier extends AsyncNotifier<ChartDetailData?> {
     final currentDate = ref.watch(selectedChartDetailDateProvider);
 
     if (currentDate != null && walletId != null) {
-      await Future.delayed(const Duration(seconds: 2));
-
       // init stream
       _initStreamSubscription(
         walletId: walletId,
