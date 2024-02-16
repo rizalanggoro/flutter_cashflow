@@ -1,4 +1,5 @@
-import 'package:cashflow/features/home_chart/presentation/providers/providers.dart';
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -11,6 +12,7 @@ import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_wallet.dart';
 import '../../domain/entities/chart_data_item.dart';
+import 'providers.dart';
 
 class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {
   @override
@@ -18,7 +20,17 @@ class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {
     final walletId = ref.watch(selectedWalletProvider).value?.id;
     if (walletId != null) {
       final dateRangeFilter = ref.watch(selectedDateRangeFilterProvider);
+
       final firstDate = ref.watch(selectedFirstChartDateProvider);
+      final lastDate = ref.watch(selectedLastChartDateProvider);
+
+      // subscribe to stream
+      _initStreamSubscription(
+        walletId: walletId,
+        dateRangeFilter: dateRangeFilter,
+        firstDate: firstDate,
+        lastDate: lastDate,
+      );
 
       // read data
       return _read(
@@ -26,11 +38,57 @@ class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {
         dateRangeFilter: dateRangeFilter,
         firstDate: firstDate,
       );
-
-      // subscribe to stream
     }
 
     return [];
+  }
+
+  void _initStreamSubscription({
+    required int walletId,
+    required DateRangeFilter dateRangeFilter,
+    required DateTime firstDate,
+    required DateTime lastDate,
+  }) {
+    final nextLastDate = switch (dateRangeFilter) {
+      DateRangeFilter.yearly => DateTime(
+          lastDate.year + 1,
+        ),
+      DateRangeFilter.monthly => DateTime(
+          lastDate.year,
+          lastDate.month + 1,
+        ),
+      DateRangeFilter.daily => DateTime(
+          lastDate.year,
+          lastDate.month,
+          lastDate.day + 1,
+        ),
+    };
+
+    StreamSubscription subscription = ref
+        .read(isarSourceProvider)
+        .instance
+        .transactionModels
+        .filter()
+        .wallet((q) => q.idEqualTo(walletId))
+        .dateBetween(
+          firstDate,
+          nextLastDate,
+          includeLower: true,
+          includeUpper: false,
+        )
+        .watchLazy()
+        .listen((event) async {
+      state = const AsyncValue.loading();
+      state = await AsyncValue.guard(
+        () => _read(
+          walletId: walletId,
+          dateRangeFilter: dateRangeFilter,
+          firstDate: firstDate,
+        ),
+      );
+    });
+
+    ref.onDispose(() => subscription.cancel());
   }
 
   Future<List<ChartDataItem>> _read({
