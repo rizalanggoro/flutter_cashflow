@@ -38,7 +38,7 @@ class SelectCategoryPage extends HookConsumerWidget {
         title: const Text('Pilih Kategori'),
         actions: [
           IconButton(
-            onPressed: () => context.router.push(
+            onPressed: () => context.router.popAndPush(
               const WriteCategoryRoute(),
             ),
             icon: const Icon(Icons.add_rounded),
