@@ -1,13 +1,19 @@
-import 'package:cashflow/features/home_chart/presentation/providers/providers.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../../shared/enums/category_type.dart';
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
+import '../../../../shared/presentation/widgets/empty_container.dart';
+import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../providers/chart_detail_data.dart';
+import '../providers/providers.dart';
 import '../providers/selected_chart_detail_date.dart';
 
 class ChartDetailView extends HookConsumerWidget {
@@ -15,8 +21,9 @@ class ChartDetailView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final chartDetailDataSnapshot = ref.watch(chartDetailDataProvider);
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(
@@ -100,111 +107,171 @@ class ChartDetailView extends HookConsumerWidget {
             ],
           ),
         ),
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-            top: 16,
+        chartDetailDataSnapshot.maybeWhen(
+          loading: () => const LoadingContainer(
+            padding: EdgeInsets.symmetric(vertical: 64),
           ),
-          child: AspectRatio(
-            aspectRatio: 12 / 7,
-            child: PieChart(
-              PieChartData(
-                startDegreeOffset: -90,
-                sectionsSpace: 4,
-                sections: [
-                  // income
-                  PieChartSectionData(
-                    value: 10,
-                    color: context.colorScheme.primary,
-                  ),
+          data: (data) => data == null
+              ? const EmptyContainer(
+                  padding: EdgeInsets.symmetric(vertical: 64),
+                )
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          AspectRatio(
+                            aspectRatio: 12 / 7,
+                            child: PieChart(
+                              PieChartData(
+                                startDegreeOffset: -90,
+                                sectionsSpace: 4,
+                                sections: [
+                                  // income
+                                  PieChartSectionData(
+                                    value: data.totalIncome,
+                                    color: context.colorScheme.primary,
+                                    showTitle: false,
+                                  ),
 
-                  // expense
-                  PieChartSectionData(
-                    value: 20,
-                    color: context.colorScheme.primaryContainer,
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-        const Gap(16),
+                                  // expense
+                                  PieChartSectionData(
+                                    value: data.totalExpense,
+                                    color: context.colorScheme.primaryContainer,
+                                    showTitle: false,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Gap(16),
 
-        // card income, expense
-        Card(
-          margin: const EdgeInsets.only(
-            left: 16,
-            right: 16,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  left: 16,
-                  right: 16,
-                  top: 16,
+                    // card income, expense
+                    Card(
+                      margin: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(
+                              left: 16,
+                              right: 16,
+                              top: 16,
+                            ),
+                            child: Text(
+                              'Status anggaran',
+                              style: context.textTheme.titleMedium,
+                            ),
+                          ),
+                          ListTile(
+                            leading: CircleAvatar(
+                              child: Icon(
+                                data.totalIncome > data.totalExpense
+                                    ? Icons.trending_up_rounded
+                                    : Icons.trending_down_rounded,
+                              ),
+                            ),
+                            title: Text(
+                              data.totalIncome > data.totalExpense
+                                  ? 'Suplus'
+                                  : 'Defisit',
+                            ),
+                            subtitle: Text(
+                              NumberFormat.currency().format(
+                                data.totalIncome - data.totalExpense,
+                              ),
+                            ),
+                          ),
+                          const Divider(),
+                          ListTile(
+                            trailing: const CircleAvatar(
+                                child: Icon(Icons.south_west_rounded)),
+                            title: const Text('Pemasukan'),
+                            subtitle: Text(
+                              NumberFormat.currency().format(data.totalIncome),
+                            ),
+                          ),
+                          ListTile(
+                            trailing: const CircleAvatar(
+                                child: Icon(Icons.north_east_rounded)),
+                            title: const Text('Pengeluaran'),
+                            subtitle: Text(
+                              NumberFormat.currency().format(data.totalExpense),
+                            ),
+                          ),
+                          const Gap(8),
+                        ],
+                      ),
+                    ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        top: 16,
+                        bottom: 8,
+                      ),
+                      child: Text(
+                        'Daftar transaksi',
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ),
+
+                    // transactions
+                    ListView.builder(
+                      itemBuilder: (context, index) {
+                        final transaction = data.transactions[index];
+                        final category = transaction.category.value;
+                        final categoryType = category?.type;
+
+                        return ListTile(
+                          leading: CircleAvatar(
+                            child: Icon(
+                              categoryType == null
+                                  ? Icons.remove_rounded
+                                  : (categoryType.isIncome
+                                      ? Icons.south_west_rounded
+                                      : Icons.north_east_rounded),
+                            ),
+                          ),
+                          title: Text(category?.name ?? 'Tidak ada kategori'),
+                          subtitle: Text(
+                            transaction.note,
+                            maxLines: 2,
+                          ),
+                          trailing: Text(
+                            NumberFormat.compactCurrency().format(
+                              transaction.amount,
+                            ),
+                          ),
+                          onTap: () => context.router.push(
+                            DetailTransactionRoute(
+                              transactionId: transaction.id,
+                            ),
+                          ),
+                        );
+                      },
+                      itemCount: data.transactions.length,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  'Status anggaran',
-                  style: context.textTheme.titleMedium,
-                ),
-              ),
-              ListTile(
-                leading: const CircleAvatar(
-                  child: Icon(Icons.trending_down_rounded),
-                ),
-                title: const Text('Defisit'),
-                subtitle: Text(NumberFormat.currency().format(-12000)),
-              ),
-              const Divider(),
-              ListTile(
-                leading:
-                    const CircleAvatar(child: Icon(Icons.south_west_rounded)),
-                title: const Text('Pemasukan'),
-                subtitle: Text(NumberFormat.currency().format(12000)),
-              ),
-              ListTile(
-                leading:
-                    const CircleAvatar(child: Icon(Icons.north_east_rounded)),
-                title: const Text('Pengeluaran'),
-                subtitle: Text(NumberFormat.currency().format(12000)),
-              ),
-              const Gap(8),
-            ],
+          orElse: () => const EmptyContainer(
+            padding: EdgeInsets.symmetric(vertical: 64),
           ),
-        ),
-
-        Padding(
-          padding: const EdgeInsets.only(
-            left: 16,
-            top: 16,
-            bottom: 8,
-          ),
-          child: Text(
-            'Daftar transaksi',
-            style: context.textTheme.titleMedium,
-          ),
-        ),
-
-        // transactions
-        ListView.builder(
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading:
-                  const CircleAvatar(child: Icon(Icons.south_west_rounded)),
-              title: Text('Category name $index'),
-              subtitle: const Text('Transaction note example'),
-              trailing: Text(
-                NumberFormat.compactCurrency().format(12000),
-              ),
-              onTap: () {},
-            );
-          },
-          itemCount: 5,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
         ),
       ],
     );
