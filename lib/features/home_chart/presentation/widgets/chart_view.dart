@@ -145,7 +145,7 @@ class ChartView extends HookConsumerWidget {
                                 width: 16,
                                 borderRadius: BorderRadius.circular(4),
                                 color: context.colorScheme.primary
-                                    .withOpacity(isSelected ? .32 : 1),
+                                    .withOpacity(isSelected ? .48 : 1),
                                 borderSide: BorderSide(
                                   color: context.colorScheme.primary,
                                 ),
@@ -155,7 +155,7 @@ class ChartView extends HookConsumerWidget {
                                   width: 16,
                                   borderRadius: BorderRadius.circular(4),
                                   color: context.colorScheme.primaryContainer
-                                      .withOpacity(isSelected ? .32 : 1),
+                                      .withOpacity(isSelected ? .48 : 1),
                                   borderSide: BorderSide(
                                     color: context.colorScheme.primaryContainer,
                                   )),
