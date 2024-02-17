@@ -22,8 +22,8 @@ class HomeDashboardPage extends HookConsumerWidget {
           CurrentWalletSummaryView(),
           Gap(8),
           AllWalletsSummaryView(),
-          Gap(8),
-          ShortcutsView(),
+          if (false) Gap(8),
+          if (false) ShortcutsView(),
 
           Gap(16),
           RecentTransactionsView(),
