@@ -1,9 +1,15 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../../shared/enums/category_type.dart';
+import '../../../../shared/presentation/widgets/empty_container.dart';
+import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../providers/recent_transactions_data.dart';
 
 class RecentTransactionsView extends HookConsumerWidget {
   const RecentTransactionsView({super.key});
@@ -26,43 +32,88 @@ class RecentTransactionsView extends HookConsumerWidget {
             'Beberapa transaksi terbaru yang Anda lakukan pada bulan ${DateFormat.yMMMM().format(DateTime.now())}',
           ),
         ),
-        const Gap(8),
-        ListView.builder(
-          itemBuilder: (context, index) {
-            return ListTile(
-              leading:
-                  const CircleAvatar(child: Icon(Icons.south_west_rounded)),
-              title: Text('Nama kategori $index'),
-              subtitle: const Text('Catatan transaksi'),
-              trailing: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    NumberFormat.compactCurrency().format(120987),
-                  ),
-                  Text(
-                    DateFormat.MEd().format(DateTime.now()),
-                  ),
-                ],
-              ),
-              onTap: () {},
-            );
-          },
-          itemCount: 5,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-        ),
-        const Gap(8),
-        Container(
-          width: double.infinity,
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-          child: OutlinedButton(
-            onPressed: () {},
-            child: const Text('Lihat lainnya'),
-          ),
-        ),
+        ref.watch(recentTransactionsDataProvider).maybeWhen(
+              loading: () => _loadingContainer,
+              data: (data) => data.isEmpty
+                  ? _emptyContainer
+                  : Column(
+                      children: [
+                        const Gap(8),
+                        ListView.builder(
+                          itemBuilder: (context, index) {
+                            final transaction = data[index];
+                            final category = transaction.category.value;
+                            final categoryType = category?.type;
+
+                            return ListTile(
+                              leading: CircleAvatar(
+                                child: Icon(
+                                  categoryType == null
+                                      ? Icons.remove_rounded
+                                      : (categoryType.isIncome
+                                          ? Icons.south_west_rounded
+                                          : Icons.north_east_rounded),
+                                ),
+                              ),
+                              title: Text(
+                                category?.name ?? 'Tidak ada kategori',
+                              ),
+                              subtitle: transaction.note.isEmpty
+                                  ? null
+                                  : Text(
+                                      transaction.note,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                              trailing: Column(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    NumberFormat.compactCurrency().format(
+                                      transaction.amount,
+                                    ),
+                                  ),
+                                  Text(
+                                    DateFormat.MEd().format(
+                                      transaction.date,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              onTap: () => context.router.push(
+                                DetailTransactionRoute(
+                                  transactionId: transaction.id,
+                                ),
+                              ),
+                            );
+                          },
+                          itemCount: data.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                        ),
+                        const Gap(8),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          child: OutlinedButton(
+                            onPressed: () =>
+                                AutoTabsRouter.of(context).setActiveIndex(1),
+                            child: const Text('Lihat lainnya'),
+                          ),
+                        ),
+                      ],
+                    ),
+              orElse: () => _emptyContainer,
+            )
       ],
     );
   }
+
+  Widget get _loadingContainer => const LoadingContainer(
+        padding: EdgeInsets.all(64),
+      );
+  Widget get _emptyContainer => const EmptyContainer(
+        padding: EdgeInsets.all(64),
+      );
 }
