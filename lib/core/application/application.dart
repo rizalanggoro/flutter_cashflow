@@ -13,18 +13,20 @@ class MyApplication extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     _router ??= MyRouter(ref: ref);
 
-    final themeData = ThemeData(
-      useMaterial3: true,
-      brightness: ref.watch(themeProvider) == ThemeMode.dark
-          ? Brightness.dark
-          : Brightness.light,
-      colorSchemeSeed: const Color(0xff164863),
-    );
-
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       routerConfig: _router?.config(),
-      theme: themeData.copyWith(
+      theme: ThemeData(
+        useMaterial3: true,
+        brightness: ref.watch(themeProvider) == ThemeMode.dark
+            ? Brightness.dark
+            : Brightness.light,
+        colorSchemeSeed: const Color(0xff164863),
+        // colorScheme: ColorScheme.light(),
+        // colorScheme: ref.watch(themeProvider) == ThemeMode.dark
+        //     ? darkDynamic
+        //     : lightDynamic,
+      ).copyWith(
         // app bar
         appBarTheme: const AppBarTheme(
           scrolledUnderElevation: 0,

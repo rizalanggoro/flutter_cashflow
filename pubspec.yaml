@@ -60,6 +60,7 @@ dependencies:
   fl_chart: ^0.66.2
   gap: ^3.0.1
   expandable: ^5.0.1
+  dynamic_color: ^1.6.9
 
 dev_dependencies:
   flutter_test:
