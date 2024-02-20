@@ -62,7 +62,7 @@ class HomePage extends HookConsumerWidget {
                   ref.watch(selectedWalletProvider).maybeWhen(
                       data: (data) => Text(
                             data?.name ?? 'Tidak ada dompet',
-                            style: context.textTheme.bodySmall,
+                            style: context.textTheme.bodyMedium,
                           ),
                       orElse: () => const SizedBox())
               ],
