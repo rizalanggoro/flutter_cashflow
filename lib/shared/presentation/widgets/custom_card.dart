@@ -8,6 +8,7 @@ enum CustomCardPosition { initial, start, middle, end }
 
 enum CustomCardVariant { primary, secondary, danger }
 
+@Deprecated('Gunakan material design 3')
 class CustomCard extends HookWidget {
   final Widget child;
   final EdgeInsets? margin;
