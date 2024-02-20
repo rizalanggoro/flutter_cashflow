@@ -8,6 +8,7 @@ import '../../../core/utils/extensions.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/failure_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';
+import '../domain/usecases/delete_transaction.dart';
 import '../domain/usecases/read_transaction.dart';
 
 @RoutePage()
@@ -39,7 +40,35 @@ class DetailTransactionPage extends HookConsumerWidget {
             icon: const Icon(Icons.edit_rounded),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () => showDialog(
+              context: context,
+              builder: (context) => AlertDialog(
+                title: const Text('Hapus transaksi'),
+                content: const Text(
+                  'Apakah Anda yakin akan menghapus transaksi ini?',
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => context.router.pop(),
+                    child: const Text('Batal'),
+                  ),
+                  TextButton(
+                    onPressed: () => ref
+                        .read(deleteTransactionUseCaseProvider)
+                        .call(transactionId: transactionId)
+                        .then(
+                          (value) => value.fold(
+                            (l) => context.showSnackBar(message: l.message),
+                            (r) => context.router.popUntil(
+                              (route) => route.settings.name == 'HomeRoute',
+                            ),
+                          ),
+                        ),
+                    child: const Text('Hapus'),
+                  ),
+                ],
+              ),
+            ),
             icon: const Icon(Icons.delete_rounded),
           ),
           const SizedBox(width: 16),
