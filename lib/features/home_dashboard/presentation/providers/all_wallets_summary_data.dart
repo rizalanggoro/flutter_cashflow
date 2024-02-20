@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -13,6 +15,11 @@ class AllWalletsSummaryDataNotifier
     extends AsyncNotifier<AllWalletsSummaryData?> {
   @override
   Future<AllWalletsSummaryData?> build() async {
+    _listenStreamSubscription();
+    return _read();
+  }
+
+  Future<AllWalletsSummaryData> _read() async {
     final totalIncome = await ref
         .watch(isarSourceProvider)
         .instance
@@ -57,6 +64,7 @@ class AllWalletsSummaryDataNotifier
           .category((q) => q.typeEqualTo(CategoryType.expense))
           .amountProperty()
           .sum();
+
       walletItems.add(AllWalletsSummaryWalletItem(
         wallet: wallet,
         totalIncome: totalIncome,
@@ -68,6 +76,20 @@ class AllWalletsSummaryDataNotifier
       totalBalance: totalIncome - totalExpense,
       walletItems: walletItems,
     );
+  }
+
+  void _listenStreamSubscription() {
+    StreamSubscription subscription = ref
+        .watch(isarSourceProvider)
+        .instance
+        .transactionModels
+        .watchLazy()
+        .listen((event) async {
+      state = const AsyncValue.loading();
+      state = await AsyncValue.guard(() => _read());
+    });
+
+    ref.onDispose(() => subscription.cancel());
   }
 }
 
