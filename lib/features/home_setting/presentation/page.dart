@@ -1,7 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
@@ -10,6 +13,7 @@ import '../../../shared/presentation/providers/expense_categories.dart';
 import '../../../shared/presentation/providers/income_categories.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../../../shared/presentation/providers/theme.dart';
+import '../domain/usecases/check_update.dart';
 import '../domain/usecases/dummy_transactions.dart';
 
 @RoutePage()
@@ -18,6 +22,8 @@ class HomeSettingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final isCheckingUpdate = useState(false);
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,12 +87,64 @@ class HomeSettingPage extends HookConsumerWidget {
               style: context.textTheme.titleMedium,
             ),
           ),
-          const ListTile(
-            leading: CircleAvatar(
+          ListTile(
+            leading: const CircleAvatar(
               child: Icon(Icons.info_rounded),
             ),
-            title: Text('Status aplikasi'),
-            subtitle: Text('Dalam tahap pengembangan'),
+            title: const Text('Versi'),
+            subtitle: FutureBuilder(
+              future: PackageInfo.fromPlatform(),
+              builder: (context, snapshot) => Text(
+                '${(snapshot.data?.version)}+${snapshot.data?.buildNumber}',
+              ),
+            ),
+          ),
+          ListTile(
+            enabled: !isCheckingUpdate.value,
+            leading: const CircleAvatar(
+              child: Icon(Icons.update_rounded),
+            ),
+            title: const Text('Periksa pembaruan'),
+            onTap: isCheckingUpdate.value
+                ? null
+                : () {
+                    isCheckingUpdate.value = true;
+                    ref
+                        .read(checkUpdateUseCaseProvider)
+                        .call()
+                        .then(
+                          (value) => value.fold(
+                            (l) => context.showSnackBar(message: l.message),
+                            (r) => r == null
+                                ? context.showSnackBar(
+                                    message: 'Tidak ada pembaruan!',
+                                  )
+                                : context.showSnackBar(
+                                    message: 'Tersedia pembaruan!',
+                                    action: SnackBarAction(
+                                      label: 'Unduh',
+                                      onPressed: () => launchUrl(
+                                        Uri.parse(r.downloadUrl),
+                                        mode: LaunchMode.externalApplication,
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                        )
+                        .whenComplete(
+                          () => isCheckingUpdate.value = false,
+                        );
+                  },
+            trailing: isCheckingUpdate.value
+                ? const SizedBox(
+                    width: 24,
+                    height: 24,
+                    child: CircularProgressIndicator(
+                      strokeCap: StrokeCap.round,
+                      strokeWidth: 3.2,
+                    ),
+                  )
+                : const Icon(Icons.chevron_right_rounded),
           ),
 
           if (kDebugMode) const Divider(),
