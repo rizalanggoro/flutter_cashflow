@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:currency_text_input_formatter/currency_text_input_formatter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -10,6 +9,7 @@ import 'package:intl/intl.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
+import '../../../core/utils/hooks.dart';
 import '../../../shared/data/models/category.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../domain/usecases/create_transaction.dart';
@@ -22,7 +22,8 @@ class WriteTransactionPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     log('build: write transaction');
 
-    final formatterAmount = useState(CurrencyTextInputFormatter());
+    // final formatterAmount = useState(CurrencyTextInputFormatter());
+    final formatterAmount = useCurrencyInputFormatter();
     final controllerNote = useTextEditingController();
 
     final selectedCategory = useState<CategoryModel?>(null);
