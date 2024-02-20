@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -20,24 +22,76 @@ class RecentTransactionsNotifier extends AsyncNotifier<List<TransactionModel>> {
         currentDate.month + 1,
       );
 
-      return await ref
-          .watch(isarSourceProvider)
-          .instance
-          .transactionModels
-          .filter()
-          .wallet((q) => q.idEqualTo(walletId))
-          .dateBetween(
-            currentDate,
-            nextDate,
-            includeLower: true,
-            includeUpper: false,
-          )
-          .sortByDateDesc()
-          .limit(5)
-          .findAll();
+      _listenStream(
+        walletId: walletId,
+        currentDate: currentDate,
+        nextDate: nextDate,
+      );
+
+      return _read(
+        walletId: walletId,
+        currentDate: currentDate,
+        nextDate: nextDate,
+      );
     }
 
     return [];
+  }
+
+  Future<List<TransactionModel>> _read({
+    required int walletId,
+    required DateTime currentDate,
+    required DateTime nextDate,
+  }) async {
+    return await ref
+        .watch(isarSourceProvider)
+        .instance
+        .transactionModels
+        .filter()
+        .wallet((q) => q.idEqualTo(walletId))
+        .dateBetween(
+          currentDate,
+          nextDate,
+          includeLower: true,
+          includeUpper: false,
+        )
+        .sortByDateDesc()
+        .limit(5)
+        .findAll();
+  }
+
+  void _listenStream({
+    required int walletId,
+    required DateTime currentDate,
+    required DateTime nextDate,
+  }) {
+    StreamSubscription subscription = ref
+        .watch(isarSourceProvider)
+        .instance
+        .transactionModels
+        .filter()
+        .wallet((q) => q.idEqualTo(walletId))
+        .dateBetween(
+          currentDate,
+          nextDate,
+          includeLower: true,
+          includeUpper: false,
+        )
+        .sortByDateDesc()
+        .limit(5)
+        .watchLazy()
+        .listen((event) async {
+      state = const AsyncValue.loading();
+      state = await AsyncValue.guard(
+        () => _read(
+          walletId: walletId,
+          currentDate: currentDate,
+          nextDate: nextDate,
+        ),
+      );
+    });
+
+    ref.onDispose(() => subscription.cancel());
   }
 }
 
