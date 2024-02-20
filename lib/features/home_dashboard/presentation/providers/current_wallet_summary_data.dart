@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
@@ -24,59 +26,103 @@ class CurrentWalletSummaryDataNotifier
         currentDate.month + 1,
       );
 
-      return CurrentWalletSummaryData(
-        totalBalance: await ref
-                .watch(isarSourceProvider)
-                .instance
-                .transactionModels
-                .filter()
-                .wallet((q) => q.idEqualTo(walletId))
-                .category((q) => q.typeEqualTo(CategoryType.income))
-                .amountProperty()
-                .sum() -
-            await ref
-                .watch(isarSourceProvider)
-                .instance
-                .transactionModels
-                .filter()
-                .wallet((q) => q.idEqualTo(walletId))
-                .category((q) => q.typeEqualTo(CategoryType.expense))
-                .amountProperty()
-                .sum(),
-        totalIncome: await ref
-            .watch(isarSourceProvider)
-            .instance
-            .transactionModels
-            .filter()
-            .wallet((q) => q.idEqualTo(walletId))
-            .category((q) => q.typeEqualTo(CategoryType.income))
-            .dateBetween(
-              currentDate,
-              nextDate,
-              includeLower: true,
-              includeUpper: false,
-            )
-            .amountProperty()
-            .sum(),
-        totalExpense: await ref
-            .watch(isarSourceProvider)
-            .instance
-            .transactionModels
-            .filter()
-            .wallet((q) => q.idEqualTo(walletId))
-            .category((q) => q.typeEqualTo(CategoryType.expense))
-            .dateBetween(
-              currentDate,
-              nextDate,
-              includeLower: true,
-              includeUpper: false,
-            )
-            .amountProperty()
-            .sum(),
+      _listenStream(
+        walletId: walletId,
+        currentDate: currentDate,
+        nextDate: nextDate,
+      );
+
+      return _read(
+        walletId: walletId,
+        currentDate: currentDate,
+        nextDate: nextDate,
       );
     }
 
     return null;
+  }
+
+  Future<CurrentWalletSummaryData> _read({
+    required int walletId,
+    required DateTime currentDate,
+    required DateTime nextDate,
+  }) async {
+    return CurrentWalletSummaryData(
+      totalBalance: await ref
+              .watch(isarSourceProvider)
+              .instance
+              .transactionModels
+              .filter()
+              .wallet((q) => q.idEqualTo(walletId))
+              .category((q) => q.typeEqualTo(CategoryType.income))
+              .amountProperty()
+              .sum() -
+          await ref
+              .watch(isarSourceProvider)
+              .instance
+              .transactionModels
+              .filter()
+              .wallet((q) => q.idEqualTo(walletId))
+              .category((q) => q.typeEqualTo(CategoryType.expense))
+              .amountProperty()
+              .sum(),
+      totalIncome: await ref
+          .watch(isarSourceProvider)
+          .instance
+          .transactionModels
+          .filter()
+          .wallet((q) => q.idEqualTo(walletId))
+          .category((q) => q.typeEqualTo(CategoryType.income))
+          .dateBetween(
+            currentDate,
+            nextDate,
+            includeLower: true,
+            includeUpper: false,
+          )
+          .amountProperty()
+          .sum(),
+      totalExpense: await ref
+          .watch(isarSourceProvider)
+          .instance
+          .transactionModels
+          .filter()
+          .wallet((q) => q.idEqualTo(walletId))
+          .category((q) => q.typeEqualTo(CategoryType.expense))
+          .dateBetween(
+            currentDate,
+            nextDate,
+            includeLower: true,
+            includeUpper: false,
+          )
+          .amountProperty()
+          .sum(),
+    );
+  }
+
+  void _listenStream({
+    required int walletId,
+    required DateTime currentDate,
+    required DateTime nextDate,
+  }) {
+    StreamSubscription subscription = ref
+        .watch(isarSourceProvider)
+        .instance
+        .transactionModels
+        .filter()
+        .wallet((q) => q.idEqualTo(walletId))
+        .watchLazy()
+        .listen((event) async {
+      state = const AsyncValue.loading();
+      state = await AsyncValue.guard(
+        () => _read(
+          walletId: walletId,
+          currentDate: currentDate,
+          nextDate: nextDate,
+        ),
+      );
+    });
+
+    ref.onDispose(() => subscription.cancel());
   }
 }
 
