@@ -194,6 +194,14 @@ class HomeTransactionPage extends HookConsumerWidget {
 
                             return ListTile(
                               leading: CircleAvatar(
+                                backgroundColor: categoryType != null &&
+                                        categoryType.isExpense
+                                    ? context.colorScheme.errorContainer
+                                    : context.colorScheme.primaryContainer,
+                                foregroundColor: categoryType != null &&
+                                        categoryType.isExpense
+                                    ? context.colorScheme.onErrorContainer
+                                    : context.colorScheme.onPrimaryContainer,
                                 child: Icon(
                                   categoryType == null
                                       ? Icons.remove_rounded
