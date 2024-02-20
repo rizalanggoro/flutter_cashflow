@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cashflow/features/home_dashboard/presentation/providers/balance_visibility.dart';
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -17,8 +17,6 @@ class AllWalletsSummaryView extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isBalanceVisible = useState(true);
-
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -66,16 +64,17 @@ class AllWalletsSummaryView extends HookConsumerWidget {
                                 child: Icon(Icons.language_rounded)),
                             title: const Text('Total saldo'),
                             subtitle: Text(
-                              isBalanceVisible.value
+                              ref.watch(balanceVisibilityProvider)
                                   ? NumberFormat.currency()
                                       .format(data.totalBalance)
                                   : 'IDRXXX.XXX.XXX',
                             ),
                             trailing: IconButton(
-                              onPressed: () => isBalanceVisible.value =
-                                  !isBalanceVisible.value,
+                              onPressed: () => ref
+                                  .read(balanceVisibilityProvider.notifier)
+                                  .toggle(),
                               icon: Icon(
-                                isBalanceVisible.value
+                                ref.watch(balanceVisibilityProvider)
                                     ? Icons.visibility_off_rounded
                                     : Icons.visibility_rounded,
                               ),
