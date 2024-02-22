@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:cashflow/core/router/router.gr.dart';
+import 'package:cashflow/features/detail_transaction/domain/usecases/watch_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -23,12 +24,18 @@ class DetailTransactionPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    // listen to stream
+    final streamTransactionSnapshot = useStream(ref
+        .watch(watchTransactionUseCaseProvider)
+        .call(transactionId: transactionId)
+        .fold((l) => null, (r) => r));
+
     final transactionSnapshot = useFuture(
       useMemoized(
         () => ref
             .watch(readTransactionUseCaseProvider)
             .call(transactionId: transactionId),
-        [],
+        [streamTransactionSnapshot],
       ),
     );
 
