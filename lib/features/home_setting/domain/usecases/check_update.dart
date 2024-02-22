@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
@@ -36,7 +37,8 @@ class _UseCase {
             .first;
 
         final packageInfo = await PackageInfo.fromPlatform();
-        final currentBuildNumber = int.parse(packageInfo.buildNumber);
+        final currentBuildNumber =
+            int.parse(packageInfo.buildNumber) + (kDebugMode ? 0 : 2000);
 
         if (currentBuildNumber < latestBuildNumber) {
           // new update available
