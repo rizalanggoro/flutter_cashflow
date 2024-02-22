@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:cashflow/features/manage_category/presentation/widgets/bottom_sheet_confirm_delete_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -17,6 +16,7 @@ import '../../../shared/presentation/providers/income_categories.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/failure_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';
+import 'widgets/bottom_sheet_confirm_delete_category.dart';
 
 // page
 @RoutePage()
@@ -107,7 +107,7 @@ class ManageCategoryPage extends HookConsumerWidget {
                           ),
                           trailing: PopupMenuButton(
                             itemBuilder: (context) => [
-                              PopupMenuItem(
+                              const PopupMenuItem(
                                 child: ListTile(
                                   leading: Icon(Icons.edit_rounded),
                                   title: Text('Ubah kategori'),
@@ -124,7 +124,7 @@ class ManageCategoryPage extends HookConsumerWidget {
                                     category: category,
                                   ),
                                 ),
-                                child: ListTile(
+                                child: const ListTile(
                                   leading: Icon(Icons.delete_rounded),
                                   title: Text('Hapus kategori'),
                                 ),
@@ -134,8 +134,6 @@ class ManageCategoryPage extends HookConsumerWidget {
                         );
                       },
                       itemCount: data.length,
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
                     ),
               orElse: () => const EmptyContainer(),
             ),
