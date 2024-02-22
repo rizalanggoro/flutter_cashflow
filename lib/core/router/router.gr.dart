@@ -112,9 +112,14 @@ abstract class $MyRouter extends _i14.RootStackRouter {
       );
     },
     WriteTransactionRoute.name: (routeData) {
+      final args = routeData.argsAs<WriteTransactionRouteArgs>(
+          orElse: () => const WriteTransactionRouteArgs());
       return _i14.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i12.WriteTransactionPage(),
+        child: _i12.WriteTransactionPage(
+          key: args.key,
+          transactionId: args.transactionId,
+        ),
       );
     },
     WriteWalletRoute.name: (routeData) {
@@ -336,16 +341,41 @@ class WriteCategoryRoute extends _i14.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i12.WriteTransactionPage]
-class WriteTransactionRoute extends _i14.PageRouteInfo<void> {
-  const WriteTransactionRoute({List<_i14.PageRouteInfo>? children})
-      : super(
+class WriteTransactionRoute
+    extends _i14.PageRouteInfo<WriteTransactionRouteArgs> {
+  WriteTransactionRoute({
+    _i15.Key? key,
+    int? transactionId,
+    List<_i14.PageRouteInfo>? children,
+  }) : super(
           WriteTransactionRoute.name,
+          args: WriteTransactionRouteArgs(
+            key: key,
+            transactionId: transactionId,
+          ),
           initialChildren: children,
         );
 
   static const String name = 'WriteTransactionRoute';
 
-  static const _i14.PageInfo<void> page = _i14.PageInfo<void>(name);
+  static const _i14.PageInfo<WriteTransactionRouteArgs> page =
+      _i14.PageInfo<WriteTransactionRouteArgs>(name);
+}
+
+class WriteTransactionRouteArgs {
+  const WriteTransactionRouteArgs({
+    this.key,
+    this.transactionId,
+  });
+
+  final _i15.Key? key;
+
+  final int? transactionId;
+
+  @override
+  String toString() {
+    return 'WriteTransactionRouteArgs{key: $key, transactionId: $transactionId}';
+  }
 }
 
 /// generated route for

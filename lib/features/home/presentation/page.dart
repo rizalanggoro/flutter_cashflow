@@ -105,8 +105,7 @@ class HomePage extends HookConsumerWidget {
           floatingActionButton: tabsRouter.activeIndex < 3
               ? FloatingActionButton(
                   child: const Icon(Icons.add_rounded),
-                  onPressed: () =>
-                      context.router.push(const WriteTransactionRoute()),
+                  onPressed: () => context.router.push(WriteTransactionRoute()),
                 )
               : null,
           body: child,

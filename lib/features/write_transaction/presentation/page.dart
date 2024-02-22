@@ -11,26 +11,72 @@ import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/utils/hooks.dart';
 import '../../../shared/data/models/category.dart';
+import '../../../shared/data/models/transaction.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../domain/usecases/create_transaction.dart';
+import '../domain/usecases/read_transaction.dart';
+import '../domain/usecases/update_transaction.dart';
 
 @RoutePage()
 class WriteTransactionPage extends HookConsumerWidget {
-  const WriteTransactionPage({super.key});
+  final int? transactionId;
+
+  const WriteTransactionPage({
+    super.key,
+    this.transactionId,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     log('build: write transaction');
 
-    // final formatterAmount = useState(CurrencyTextInputFormatter());
     final formatterAmount = useCurrencyInputFormatter();
+    final controllerAmount = useTextEditingController();
     final controllerNote = useTextEditingController();
 
+    final oldTransaction = useState<TransactionModel?>(null);
     final selectedCategory = useState<CategoryModel?>(null);
     final selectedDate = useState(DateTime.now());
 
+    final transactionSnapshot = useFuture(
+      transactionId == null
+          ? null
+          : useMemoized(() => ref
+              .watch(readTransactionUseCaseProvider)
+              .call(transactionId: transactionId)),
+    );
+
+    useEffect(
+      () {
+        if (transactionId != null) {
+          if (transactionSnapshot.connectionState == ConnectionState.done) {
+            transactionSnapshot.data?.fold(
+              (l) => context.router.pop(),
+              (r) {
+                oldTransaction.value = r;
+                controllerAmount.text =
+                    formatterAmount.value.formatDouble(r.amount);
+                controllerNote.text = r.note;
+                selectedCategory.value = r.category.value;
+                selectedDate.value = r.date;
+              },
+            );
+          }
+        }
+
+        return null;
+      },
+      [transactionSnapshot.connectionState],
+    );
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Transaksi Baru')),
+      appBar: AppBar(
+        title: Text(
+          transactionId != null && oldTransaction.value != null
+              ? 'Ubah Transaksi'
+              : 'Transaksi Baru',
+        ),
+      ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,6 +88,7 @@ class WriteTransactionPage extends HookConsumerWidget {
                 top: 16,
               ),
               child: TextField(
+                controller: controllerAmount,
                 inputFormatters: [formatterAmount.value],
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
@@ -167,20 +214,37 @@ class WriteTransactionPage extends HookConsumerWidget {
                   ),
                   const Gap(8),
                   FilledButton(
-                    onPressed: () => ref
-                        .read(createTransactionUseCaseProvider)
-                        .call(
-                          amount: formatterAmount.value
-                              .getUnformattedValue()
-                              .toDouble(),
-                          note: controllerNote.text,
-                          wallet: ref.read(selectedWalletProvider).value,
-                          category: selectedCategory.value,
-                          dateTime: selectedDate.value,
-                        )
-                        .then((value) => value.fold(
-                            (l) => context.showSnackBar(message: l.message),
-                            (r) => context.router.pop())),
+                    onPressed: () => oldTransaction.value != null
+                        ? ref
+                            .read(updateTransactionUseCaseProvider)
+                            .call(
+                              oldTransaction: oldTransaction.value,
+                              amount: formatterAmount.value
+                                  .getUnformattedValue()
+                                  .toDouble(),
+                              note: controllerNote.text,
+                              category: selectedCategory.value,
+                              dateTime: selectedDate.value,
+                            )
+                            .then((value) => value.fold(
+                                  (l) =>
+                                      context.showSnackBar(message: l.message),
+                                  (r) => context.router.pop(),
+                                ))
+                        : ref
+                            .read(createTransactionUseCaseProvider)
+                            .call(
+                              amount: formatterAmount.value
+                                  .getUnformattedValue()
+                                  .toDouble(),
+                              note: controllerNote.text,
+                              wallet: ref.read(selectedWalletProvider).value,
+                              category: selectedCategory.value,
+                              dateTime: selectedDate.value,
+                            )
+                            .then((value) => value.fold(
+                                (l) => context.showSnackBar(message: l.message),
+                                (r) => context.router.pop())),
                     child: const Text('Selesai'),
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:cashflow/core/router/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -36,7 +37,11 @@ class DetailTransactionPage extends HookConsumerWidget {
         title: const Text('Detail Transaksi'),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () => context.router.push(
+              WriteTransactionRoute(
+                transactionId: transactionId,
+              ),
+            ),
             icon: const Icon(Icons.edit_rounded),
           ),
           IconButton(
