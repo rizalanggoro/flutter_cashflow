@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../../../core/constants/constants.dart';
 import '../../../core/utils/hooks.dart';
-import '../../constants/constants.dart';
 import 'custom_card.dart';
 
 class FailureCard extends HookWidget {

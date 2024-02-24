@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
+import '../../../../core/constants/default_categories.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
-import '../../../../shared/constants/default_categories.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/models/wallet.dart';
