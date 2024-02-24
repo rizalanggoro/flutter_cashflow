@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../shared/data/sources/isar.dart';
+import '../../data/sources/isar.dart';
 import 'guards/first_wallet.dart';
 import 'router.gr.dart';
 

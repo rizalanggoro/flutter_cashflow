@@ -4,8 +4,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 import 'core/application/application.dart';
-import 'shared/data/sources/isar.dart';
-import 'shared/data/sources/preferences.dart';
+import 'data/sources/isar.dart';
+import 'data/sources/preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

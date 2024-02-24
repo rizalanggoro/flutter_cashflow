@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../shared/data/sources/preferences.dart';
+import '../../../../data/sources/preferences.dart';
 
 const _prefKey = 'homeDashboardBalanceVisibility';
 

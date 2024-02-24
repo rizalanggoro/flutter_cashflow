@@ -8,7 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
-import '../../../shared/data/sources/isar.dart';
+import '../../../data/sources/isar.dart';
 import '../../../shared/presentation/providers/expense_categories.dart';
 import '../../../shared/presentation/providers/income_categories.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';

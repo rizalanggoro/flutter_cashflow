@@ -4,9 +4,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../models/category.dart';
-import '../models/transaction.dart';
-import '../models/wallet.dart';
+import '../../shared/data/models/category.dart';
+import '../../shared/data/models/transaction.dart';
+import '../../shared/data/models/wallet.dart';
 
 class IsarSource {
   late Isar _isar;

@@ -5,10 +5,10 @@ import 'package:isar/isar.dart';
 import '../../../../core/constants/default_categories.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../../data/sources/isar.dart';
 import '../../../../shared/data/models/category.dart';
 import '../../../../shared/data/models/transaction.dart';
 import '../../../../shared/data/models/wallet.dart';
-import '../../../../shared/data/sources/isar.dart';
 import '../../../../shared/enums/category_type.dart';
 
 class _UseCase {
