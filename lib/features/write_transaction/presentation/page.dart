@@ -12,7 +12,7 @@ import '../../../core/utils/extensions.dart';
 import '../../../core/utils/hooks.dart';
 import '../../../data/models/category.dart';
 import '../../../data/models/transaction.dart';
-import '../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../presentation/providers/selected_wallet.dart';
 import '../domain/usecases/create_transaction.dart';
 import '../domain/usecases/read_transaction.dart';
 import '../domain/usecases/update_transaction.dart';

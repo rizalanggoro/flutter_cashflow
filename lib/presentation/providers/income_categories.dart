@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../core/enums/category_type.dart';
-import '../../../data/models/category.dart';
-import '../../domain/usecases/read_categories.dart';
-import '../../domain/usecases/watch_categories.dart';
+import '../../core/enums/category_type.dart';
+import '../../data/models/category.dart';
+import '../../shared/domain/usecases/read_categories.dart';
+import '../../shared/domain/usecases/watch_categories.dart';
 import 'selected_wallet.dart';
 
 class IncomeCategoriesNotifier extends AsyncNotifier<List<CategoryModel>> {

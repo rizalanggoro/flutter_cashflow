@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../data/sources/preferences.dart';
+import '../../data/sources/preferences.dart';
 
 const _prefKey = 'isDarkMode';
 

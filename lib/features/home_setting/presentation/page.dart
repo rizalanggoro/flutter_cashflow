@@ -9,10 +9,10 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../data/sources/isar.dart';
-import '../../../shared/presentation/providers/expense_categories.dart';
-import '../../../shared/presentation/providers/income_categories.dart';
-import '../../../shared/presentation/providers/selected_wallet.dart';
-import '../../../shared/presentation/providers/theme.dart';
+import '../../../presentation/providers/expense_categories.dart';
+import '../../../presentation/providers/income_categories.dart';
+import '../../../presentation/providers/selected_wallet.dart';
+import '../../../presentation/providers/theme.dart';
 import '../domain/usecases/check_update.dart';
 import '../domain/usecases/dummy_transactions.dart';
 

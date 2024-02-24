@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
-import '../../../shared/presentation/providers/wallets.dart';
+import '../../../presentation/providers/wallets.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';
 import '../../../shared/presentation/widgets/failure_container.dart';
 import '../../../shared/presentation/widgets/loading_container.dart';

@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
+import '../../../../core/enums/category_type.dart';
+import '../../../../core/enums/transaction_range_filter.dart';
 import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../core/enums/category_type.dart';
-import '../../../../core/enums/transaction_range_filter.dart';
-import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
-import '../../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../../presentation/providers/selected_date_range_filter.dart';
+import '../../../../presentation/providers/selected_wallet.dart';
 import '../../domain/entities/chart_detail_data.dart';
 import 'selected_chart_detail_date.dart';
 

@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
-import '../../../data/models/wallet.dart';
-import '../../../data/sources/isar.dart';
-import '../../../data/sources/preferences.dart';
+import '../../data/models/wallet.dart';
+import '../../data/sources/isar.dart';
+import '../../data/sources/preferences.dart';
 
 // selected wallet
 const _prefSelectedWallet = 'selectedWallet';

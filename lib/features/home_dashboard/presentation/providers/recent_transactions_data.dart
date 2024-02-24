@@ -6,7 +6,7 @@ import 'package:isar/isar.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../../presentation/providers/selected_wallet.dart';
 
 class RecentTransactionsNotifier extends AsyncNotifier<List<TransactionModel>> {
   @override

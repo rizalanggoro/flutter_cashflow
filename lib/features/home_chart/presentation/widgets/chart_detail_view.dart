@@ -9,7 +9,7 @@ import '../../../../core/enums/category_type.dart';
 import '../../../../core/enums/transaction_range_filter.dart';
 import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
-import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
+import '../../../../presentation/providers/selected_date_range_filter.dart';
 import '../../../../shared/presentation/widgets/empty_container.dart';
 import '../../../../shared/presentation/widgets/loading_container.dart';
 import '../providers/chart_detail_data.dart';

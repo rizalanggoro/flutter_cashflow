@@ -5,10 +5,10 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/constants/constants.dart';
-import '../../../core/utils/extensions.dart';
-import '../../../shared/domain/entities/category_type_item.dart';
 import '../../../core/enums/category_type.dart';
-import '../../../shared/presentation/providers/selected_wallet.dart';
+import '../../../core/utils/extensions.dart';
+import '../../../presentation/providers/selected_wallet.dart';
+import '../../../shared/domain/entities/category_type_item.dart';
 import '../domain/usecases/create_category.dart';
 
 @RoutePage()

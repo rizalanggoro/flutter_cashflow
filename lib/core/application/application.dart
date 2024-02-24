@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../shared/presentation/providers/theme.dart';
+import '../../presentation/providers/theme.dart';
 import '../router/router.dart';
 
 MyRouter? _router;
