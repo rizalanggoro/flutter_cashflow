@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/utils/extensions.dart';
 import '../../../../presentation/providers/selected_wallet.dart';
-import '../../../../shared/presentation/widgets/empty_container.dart';
-import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../../../../presentation/widgets/empty_container.dart';
+import '../../../../presentation/widgets/loading_container.dart';
 import '../providers/current_wallet_summary_data.dart';
 
 class CurrentWalletSummaryView extends HookConsumerWidget {

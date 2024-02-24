@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../core/utils/extensions.dart';
+import '../../core/utils/extensions.dart';
 
 class FailureContainer extends StatelessWidget {
   final String message;

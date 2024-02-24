@@ -8,8 +8,8 @@ import 'package:intl/intl.dart';
 
 import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
-import '../../../../shared/presentation/widgets/empty_container.dart';
-import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../../../../presentation/widgets/empty_container.dart';
+import '../../../../presentation/widgets/loading_container.dart';
 import '../providers/all_wallets_summary_data.dart';
 
 class AllWalletsSummaryView extends HookConsumerWidget {

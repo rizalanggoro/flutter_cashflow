@@ -9,8 +9,8 @@ import 'package:intl/intl.dart';
 import '../../../../core/enums/transaction_range_filter.dart';
 import '../../../../core/utils/extensions.dart';
 import '../../../../presentation/providers/selected_date_range_filter.dart';
-import '../../../../shared/presentation/widgets/empty_container.dart';
-import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../../../../presentation/widgets/empty_container.dart';
+import '../../../../presentation/widgets/loading_container.dart';
 import '../providers/providers.dart';
 import '../providers/selected_chart_detail_date.dart';
 

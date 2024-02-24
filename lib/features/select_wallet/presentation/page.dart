@@ -8,9 +8,9 @@ import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../presentation/providers/selected_wallet.dart';
 import '../../../presentation/providers/wallets.dart';
-import '../../../shared/presentation/widgets/empty_container.dart';
-import '../../../shared/presentation/widgets/failure_container.dart';
-import '../../../shared/presentation/widgets/loading_container.dart';
+import '../../../presentation/widgets/empty_container.dart';
+import '../../../presentation/widgets/failure_container.dart';
+import '../../../presentation/widgets/loading_container.dart';
 
 @RoutePage()
 class SelectWalletPage extends HookConsumerWidget {

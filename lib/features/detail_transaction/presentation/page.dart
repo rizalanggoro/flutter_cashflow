@@ -7,9 +7,9 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../core/utils/extensions.dart';
-import '../../../shared/presentation/widgets/empty_container.dart';
-import '../../../shared/presentation/widgets/failure_container.dart';
-import '../../../shared/presentation/widgets/loading_container.dart';
+import '../../../presentation/widgets/empty_container.dart';
+import '../../../presentation/widgets/failure_container.dart';
+import '../../../presentation/widgets/loading_container.dart';
 import '../domain/usecases/delete_transaction.dart';
 import '../domain/usecases/read_transaction.dart';
 

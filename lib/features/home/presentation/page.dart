@@ -6,7 +6,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../presentation/providers/selected_wallet.dart';
-import '../../../shared/presentation/widgets/bottom_sheets/transaction_filter.dart';
+import '../../../presentation/widgets/bottom_sheets/transaction_filter.dart';
 import '../domain/entities/navigation_item.dart';
 
 @RoutePage()

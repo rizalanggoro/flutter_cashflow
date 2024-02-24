@@ -10,9 +10,9 @@ import '../../../core/router/router.gr.dart';
 import '../../../data/models/category.dart';
 import '../../../presentation/providers/expense_categories.dart';
 import '../../../presentation/providers/income_categories.dart';
-import '../../../shared/presentation/widgets/empty_container.dart';
-import '../../../shared/presentation/widgets/failure_container.dart';
-import '../../../shared/presentation/widgets/loading_container.dart';
+import '../../../presentation/widgets/empty_container.dart';
+import '../../../presentation/widgets/failure_container.dart';
+import '../../../presentation/widgets/loading_container.dart';
 
 @RoutePage()
 class SelectCategoryPage extends HookConsumerWidget {

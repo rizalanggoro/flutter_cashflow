@@ -13,9 +13,9 @@ import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../presentation/providers/selected_date_range_filter.dart';
 import '../../../presentation/providers/selected_wallet.dart';
-import '../../../shared/presentation/widgets/empty_container.dart';
-import '../../../shared/presentation/widgets/failure_container.dart';
-import '../../../shared/presentation/widgets/loading_container.dart';
+import '../../../presentation/widgets/empty_container.dart';
+import '../../../presentation/widgets/failure_container.dart';
+import '../../../presentation/widgets/loading_container.dart';
 import '../domain/usecases/read_transactions.dart';
 import '../domain/usecases/watch_transactions.dart';
 

@@ -4,11 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../../core/enums/category_type.dart';
 import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
-import '../../../../core/enums/category_type.dart';
-import '../../../../shared/presentation/widgets/empty_container.dart';
-import '../../../../shared/presentation/widgets/loading_container.dart';
+import '../../../../presentation/widgets/empty_container.dart';
+import '../../../../presentation/widgets/loading_container.dart';
 import '../providers/recent_transactions_data.dart';
 
 class RecentTransactionsView extends HookConsumerWidget {
