@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 
-import '../../../core/enums/category_type.dart';
+import '../../core/enums/category_type.dart';
 
 class CategoryTypeItem {
   final String title;
