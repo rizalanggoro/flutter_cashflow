@@ -1,4 +1,4 @@
-import '../../../../shared/data/models/transaction.dart';
+import '../../../../data/models/transaction.dart';
 
 class ChartDetailData {
   final DateTime dateTime;

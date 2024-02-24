@@ -1,4 +1,4 @@
-import '../../../../shared/data/models/wallet.dart';
+import '../../../../data/models/wallet.dart';
 
 class AllWalletsSummaryWalletItem {
   final WalletModel wallet;

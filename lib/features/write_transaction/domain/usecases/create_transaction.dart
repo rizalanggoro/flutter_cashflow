@@ -1,13 +1,13 @@
-import 'package:cashflow/shared/data/models/wallet.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
+import '../../../../data/models/category.dart';
+import '../../../../data/models/transaction.dart';
+import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../shared/data/models/category.dart';
-import '../../../../shared/data/models/transaction.dart';
 
 class _UseCase {
   final Isar _isar;

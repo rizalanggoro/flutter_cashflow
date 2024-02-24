@@ -6,7 +6,7 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/utils/extensions.dart';
-import '../../../../shared/data/models/category.dart';
+import '../../../../data/models/category.dart';
 import '../../domain/usecases/delete_category.dart';
 
 class BottomSheetConfirmDeleteCategory extends HookConsumerWidget {

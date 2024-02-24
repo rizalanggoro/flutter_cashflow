@@ -4,7 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/utils/extensions.dart';
-import '../../../../shared/data/models/wallet.dart';
+import '../../../../data/models/wallet.dart';
 import '../../../../shared/presentation/providers/selected_wallet.dart';
 import '../../domain/usecases/delete_wallet.dart';
 

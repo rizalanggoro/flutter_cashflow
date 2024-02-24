@@ -1,6 +1,7 @@
-import 'package:cashflow/shared/data/models/category.dart';
-import 'package:cashflow/shared/data/models/wallet.dart';
 import 'package:isar/isar.dart';
+
+import 'category.dart';
+import 'wallet.dart';
 
 part 'transaction.g.dart';
 

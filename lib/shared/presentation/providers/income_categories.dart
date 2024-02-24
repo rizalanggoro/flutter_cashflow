@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/category.dart';
+import '../../../data/models/category.dart';
 import '../../domain/usecases/read_categories.dart';
 import '../../domain/usecases/watch_categories.dart';
 import '../../enums/category_type.dart';

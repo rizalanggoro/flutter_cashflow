@@ -3,10 +3,10 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
+import '../../../../data/models/category.dart';
+import '../../../../data/models/transaction.dart';
+import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../shared/data/models/category.dart';
-import '../../../../shared/data/models/transaction.dart';
-import '../../../../shared/data/models/wallet.dart';
 import '../../../../shared/enums/category_type.dart';
 import '../../../../shared/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';

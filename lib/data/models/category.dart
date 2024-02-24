@@ -1,7 +1,8 @@
-import 'package:cashflow/shared/data/models/transaction.dart';
-import 'package:cashflow/shared/data/models/wallet.dart';
-import 'package:cashflow/shared/enums/category_type.dart';
 import 'package:isar/isar.dart';
+
+import '../../shared/enums/category_type.dart';
+import 'transaction.dart';
+import 'wallet.dart';
 
 part 'category.g.dart';
 

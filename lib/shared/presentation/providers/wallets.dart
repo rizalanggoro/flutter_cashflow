@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../data/models/wallet.dart';
+import '../../../data/models/wallet.dart';
 import '../../domain/usecases/read_wallets.dart';
 import '../../domain/usecases/watch_wallets.dart';
 
