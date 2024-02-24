@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/models/wallet.dart';
-import '../../shared/domain/usecases/read_wallets.dart';
-import '../../shared/domain/usecases/watch_wallets.dart';
+import '../../domain/usecases/read_wallets.dart';
+import '../../domain/usecases/watch_wallets.dart';
 
 class WalletsNotifier extends AsyncNotifier<List<WalletModel>> {
   @override

@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
-import '../../../core/failure/failure.dart';
-import '../../../core/utils/typedefs.dart';
-import '../../../data/models/wallet.dart';
-import '../../../data/sources/isar.dart';
+import '../../core/failure/failure.dart';
+import '../../core/utils/typedefs.dart';
+import '../../data/models/wallet.dart';
+import '../../data/sources/isar.dart';
 
 class _UseCase {
   final Isar _isar;
