@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../../../core/utils/extensions.dart';
-import '../../../../shared/enums/transaction_range_filter.dart';
+import '../../../../core/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
 import '../../../../shared/presentation/widgets/empty_container.dart';
 import '../../../../shared/presentation/widgets/loading_container.dart';

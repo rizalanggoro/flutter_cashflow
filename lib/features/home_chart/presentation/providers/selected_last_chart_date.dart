@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../../../shared/enums/transaction_range_filter.dart';
+import '../../../../core/enums/transaction_range_filter.dart';
 import '../../../../shared/presentation/providers/selected_date_range_filter.dart';
 import 'selected_chart_date.dart';
 

@@ -1,4 +1,4 @@
-import 'package:cashflow/shared/enums/transaction_range_filter.dart';
+import 'package:cashflow/core/enums/transaction_range_filter.dart';
 import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';

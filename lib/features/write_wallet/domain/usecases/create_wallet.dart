@@ -3,13 +3,13 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/constants/default_categories.dart';
+import '../../../../core/enums/category_type.dart';
 import '../../../../core/failure/failure.dart';
 import '../../../../core/utils/typedefs.dart';
 import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../shared/enums/category_type.dart';
 
 class _UseCase {
   final Isar _isar;

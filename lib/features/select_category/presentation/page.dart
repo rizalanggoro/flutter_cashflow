@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../data/models/category.dart';
-import '../../../shared/enums/category_type.dart';
+import '../../../core/enums/category_type.dart';
 import '../../../shared/presentation/providers/expense_categories.dart';
 import '../../../shared/presentation/providers/income_categories.dart';
 import '../../../shared/presentation/widgets/empty_container.dart';

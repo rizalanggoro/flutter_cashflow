@@ -7,7 +7,7 @@ import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../shared/enums/category_type.dart';
+import '../../../../core/enums/category_type.dart';
 import '../../../../shared/presentation/providers/selected_wallet.dart';
 import '../../domain/entities/current_wallet_summary_data.dart';
 

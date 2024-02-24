@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/utils/extensions.dart';
 import '../../../domain/entities/transaction_range_filter_item.dart';
-import '../../../enums/transaction_range_filter.dart';
+import '../../../../core/enums/transaction_range_filter.dart';
 import '../../providers/selected_date_range_filter.dart';
 
 class BottomSheetTransactionFilter extends HookConsumerWidget {

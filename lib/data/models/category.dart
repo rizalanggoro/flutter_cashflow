@@ -1,6 +1,6 @@
 import 'package:isar/isar.dart';
 
-import '../../shared/enums/category_type.dart';
+import '../../core/enums/category_type.dart';
 import 'transaction.dart';
 import 'wallet.dart';
 

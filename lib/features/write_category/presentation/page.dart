@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/constants/constants.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../shared/domain/entities/category_type_item.dart';
-import '../../../shared/enums/category_type.dart';
+import '../../../core/enums/category_type.dart';
 import '../../../shared/presentation/providers/selected_wallet.dart';
 import '../domain/usecases/create_category.dart';
 

@@ -1,4 +1,4 @@
-import '../../enums/transaction_range_filter.dart';
+import '../../../core/enums/transaction_range_filter.dart';
 
 class TransactionRangeFilterItem {
   final String title;
