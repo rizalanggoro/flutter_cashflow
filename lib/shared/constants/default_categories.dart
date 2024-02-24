@@ -9,7 +9,6 @@ class DefaultCategories {
         'Makanan dan minuman',
         'Transportasi',
         'Hiburan',
-        'Perjalanan',
         'Kesehatan',
         'Pendidikan',
         'Investasi',
