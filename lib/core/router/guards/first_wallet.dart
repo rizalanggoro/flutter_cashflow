@@ -1,7 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:isar/isar.dart';
 
-import '../../../shared/data/models/wallet.dart';
+import '../../../data/models/wallet.dart';
 import '../router.gr.dart';
 
 class FirstWalletGuard extends AutoRouteGuard {
