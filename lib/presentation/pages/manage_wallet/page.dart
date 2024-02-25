@@ -6,10 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
-import '../../../presentation/providers/wallets.dart';
-import '../../../presentation/widgets/empty_container.dart';
-import '../../../presentation/widgets/failure_container.dart';
-import '../../../presentation/widgets/loading_container.dart';
+import '../../providers/wallets.dart';
+import '../../widgets/empty_container.dart';
+import '../../widgets/failure_container.dart';
+import '../../widgets/loading_container.dart';
 import 'widgets/bottom_sheet_confirm_delete_wallet.dart';
 
 @RoutePage()

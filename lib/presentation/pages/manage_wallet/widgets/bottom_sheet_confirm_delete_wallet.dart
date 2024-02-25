@@ -5,8 +5,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/utils/extensions.dart';
 import '../../../../data/models/wallet.dart';
-import '../../../../presentation/providers/selected_wallet.dart';
-import '../../domain/usecases/delete_wallet.dart';
+import '../../../../domain/usecases/delete_wallet_by_id.dart';
+import '../../../providers/selected_wallet.dart';
 
 class BottomSheetConfirmDeleteWallet extends HookConsumerWidget {
   final WalletModel wallet;
@@ -130,8 +130,8 @@ class BottomSheetConfirmDeleteWallet extends HookConsumerWidget {
                 const Gap(8),
                 FilledButton(
                   onPressed: () => ref
-                      .read(deleteWalletUseCaseProvider)
-                      .call(id: wallet.id)
+                      .read(deleteWalletByIdUseCaseProvider)
+                      .call(walletId: wallet.id)
                       .then((value) => value.fold(
                             (l) => {},
                             (r) => ref
