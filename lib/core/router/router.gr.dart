@@ -10,7 +10,6 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i14;
 import 'package:cashflow/data/models/category.dart' as _i16;
-import 'package:cashflow/features/home/presentation/page.dart' as _i4;
 import 'package:cashflow/features/home_chart/presentation/page.dart' as _i2;
 import 'package:cashflow/features/home_dashboard/presentation/page.dart' as _i3;
 import 'package:cashflow/features/home_setting/presentation/page.dart' as _i5;
@@ -29,6 +28,7 @@ import 'package:cashflow/features/write_transaction/presentation/page.dart'
 import 'package:cashflow/features/write_wallet/presentation/page.dart' as _i13;
 import 'package:cashflow/presentation/pages/detail_transaction/page.dart'
     as _i1;
+import 'package:cashflow/presentation/pages/home/page.dart' as _i4;
 import 'package:flutter/material.dart' as _i15;
 
 abstract class $MyRouter extends _i14.RootStackRouter {

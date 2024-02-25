@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class NavigationItem {
+class HomeNavigationItem {
   final String title;
   final IconData icon;
   final IconData selectedIcon;
 
-  NavigationItem({
+  HomeNavigationItem({
     required this.title,
     required this.icon,
     required this.selectedIcon,
