@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/enums/category_type.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../domain/usecases/delete_transaction_by_id.dart';
@@ -24,18 +25,17 @@ class DetailTransactionPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // listen to stream
-    final streamTransactionSnapshot = useStream(ref
-        .watch(watchTransactionByIdUseCaseProvider)
-        .call(transactionId: transactionId)
-        .fold((l) => null, (r) => r));
-
     final transactionSnapshot = useFuture(
       useMemoized(
         () => ref
             .watch(readTransactionByIdUseCaseProvider)
             .call(transactionId: transactionId),
-        [streamTransactionSnapshot],
+        [
+          useStream(ref
+              .watch(watchTransactionByIdUseCaseProvider)
+              .call(transactionId: transactionId)
+              .fold((l) => null, (r) => r))
+        ],
       ),
     );
 
@@ -148,15 +148,34 @@ class DetailTransactionPage extends HookConsumerWidget {
                         r.wallet.value?.name ?? 'Tidak ada dompet',
                       ),
                     ),
-                    ListTile(
-                      leading: const CircleAvatar(
-                        child: Icon(Icons.category_rounded),
-                      ),
-                      title: const Text('Kategori'),
-                      subtitle: Text(
-                        r.category.value?.name ?? 'Tidak ada kategori',
-                      ),
-                    ),
+                    Builder(builder: (context) {
+                      final category = r.category.value;
+                      final categoryType = category?.type;
+
+                      return ListTile(
+                        leading: CircleAvatar(
+                          backgroundColor:
+                              (categoryType ?? CategoryType.income).isExpense
+                                  ? context.colorScheme.errorContainer
+                                  : context.colorScheme.primaryContainer,
+                          foregroundColor:
+                              (categoryType ?? CategoryType.income).isExpense
+                                  ? context.colorScheme.onErrorContainer
+                                  : context.colorScheme.onPrimaryContainer,
+                          child: Icon(
+                            categoryType == null
+                                ? Icons.remove_rounded
+                                : (categoryType.isIncome
+                                    ? Icons.south_west_rounded
+                                    : Icons.north_east_rounded),
+                          ),
+                        ),
+                        title: const Text('Kategori'),
+                        subtitle: Text(
+                          r.category.value?.name ?? 'Tidak ada kategori',
+                        ),
+                      );
+                    }),
                     ListTile(
                       leading: const CircleAvatar(
                         child: Icon(Icons.today_rounded),
