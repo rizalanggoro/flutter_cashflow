@@ -1,17 +1,17 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:cashflow/core/router/router.gr.dart';
-import 'package:cashflow/features/detail_transaction/domain/usecases/watch_transaction.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
-import '../../../presentation/widgets/empty_container.dart';
-import '../../../presentation/widgets/failure_container.dart';
-import '../../../presentation/widgets/loading_container.dart';
-import '../domain/usecases/delete_transaction.dart';
-import '../domain/usecases/read_transaction.dart';
+import '../../../domain/usecases/delete_transaction_by_id.dart';
+import '../../../domain/usecases/read_transaction_by_id.dart';
+import '../../../domain/usecases/watch_transaction_by_id.dart';
+import '../../widgets/empty_container.dart';
+import '../../widgets/failure_container.dart';
+import '../../widgets/loading_container.dart';
 
 @RoutePage()
 class DetailTransactionPage extends HookConsumerWidget {
@@ -26,14 +26,14 @@ class DetailTransactionPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     // listen to stream
     final streamTransactionSnapshot = useStream(ref
-        .watch(watchTransactionUseCaseProvider)
+        .watch(watchTransactionByIdUseCaseProvider)
         .call(transactionId: transactionId)
         .fold((l) => null, (r) => r));
 
     final transactionSnapshot = useFuture(
       useMemoized(
         () => ref
-            .watch(readTransactionUseCaseProvider)
+            .watch(readTransactionByIdUseCaseProvider)
             .call(transactionId: transactionId),
         [streamTransactionSnapshot],
       ),
@@ -66,7 +66,7 @@ class DetailTransactionPage extends HookConsumerWidget {
                   ),
                   TextButton(
                     onPressed: () => ref
-                        .read(deleteTransactionUseCaseProvider)
+                        .read(deleteTransactionByIdUseCaseProvider)
                         .call(transactionId: transactionId)
                         .then(
                           (value) => value.fold(

@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
-import '../../../../core/failure/failure.dart';
-import '../../../../core/utils/typedefs.dart';
-import '../../../../data/models/transaction.dart';
-import '../../../../data/sources/isar.dart';
+import '../../core/failure/failure.dart';
+import '../../core/utils/typedefs.dart';
+import '../../data/models/transaction.dart';
+import '../../data/sources/isar.dart';
 
 class _UseCase {
   final Isar _isar;
@@ -16,16 +16,17 @@ class _UseCase {
     required int transactionId,
   }) {
     try {
-      final stream =
+      final result =
           _isar.transactionModels.where().idEqualTo(transactionId).watchLazy();
-      return Right(stream);
+      return Right(result);
     } catch (e) {
-      return Left(Failure(message: e.toString()));
+      return Left(
+        e is Failure ? e : Failure(message: e.toString()),
+      );
     }
   }
 }
 
-// provider
-final watchTransactionUseCaseProvider = Provider<_UseCase>((ref) {
+final watchTransactionByIdUseCaseProvider = Provider<_UseCase>((ref) {
   return _UseCase(isar: ref.watch(isarSourceProvider).instance);
 });
