@@ -69,11 +69,11 @@ class SelectedWalletNotifier extends AsyncNotifier<WalletModel?> {
         (value) => state = AsyncValue.data(value),
       );
 
-  void change({required WalletModel wallet}) async {
+  void change({required WalletModel? wallet}) async {
     ref
         .read(preferencesSourceProvider)
         .instance
-        .setInt(_prefSelectedWallet, wallet.id)
+        .setInt(_prefSelectedWallet, wallet?.id ?? -1)
         .then((value) {
       if (value) {
         state = AsyncValue.data(wallet);

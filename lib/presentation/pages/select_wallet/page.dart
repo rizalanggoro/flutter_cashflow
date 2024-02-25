@@ -33,7 +33,7 @@ class SelectWalletPage extends HookConsumerWidget {
       ),
       body: ref.watch(walletsProvider).maybeWhen(
             loading: () => const LoadingContainer(),
-            error: (error, stackTrace) => FailureContainer(
+            error: (error, _) => FailureContainer(
               message: error is Failure ? error.message : error.toString(),
             ),
             data: (data) => data.isEmpty
