@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import '../../providers/preferences.dart';
 import 'widgets/all_wallets_view.dart';
 import 'widgets/current_wallet_view.dart';
 import 'widgets/recent_transactions_view.dart';
-import 'widgets/shortcuts_view.dart';
 
 @RoutePage()
 class HomeDashboardPage extends HookConsumerWidget {
@@ -14,22 +14,39 @@ class HomeDashboardPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return const SingleChildScrollView(
+    final currentWalletSummaryCardVisible = ref.watch(
+      preferencesProvider.select(
+        (value) => value.currentWalletSummaryCardVisible,
+      ),
+    );
+    final allWalletsSummaryCardVisible = ref.watch(
+      preferencesProvider.select(
+        (value) => value.allWalletsSummaryCardVisible,
+      ),
+    );
+
+    return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Gap(16),
-          CurrentWalletView(),
-          Gap(8),
-          AllWalletsView(),
-          if (false) Gap(8),
-          if (false) ShortcutsView(),
+          Gap(
+            currentWalletSummaryCardVisible || allWalletsSummaryCardVisible
+                ? 16
+                : 0,
+          ),
+          if (currentWalletSummaryCardVisible) const CurrentWalletView(),
+          Gap(
+            currentWalletSummaryCardVisible && allWalletsSummaryCardVisible
+                ? 8
+                : 0,
+          ),
+          if (allWalletsSummaryCardVisible) const AllWalletsView(),
 
-          Gap(16),
-          RecentTransactionsView(),
+          const Gap(16),
+          const RecentTransactionsView(),
 
           // spacer
-          Gap(56 + 32),
+          const Gap(56 + 32),
         ],
       ),
     );

@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -13,6 +14,7 @@ import '../../../domain/usecases/check_update.dart';
 import '../../../domain/usecases/create_dummy_transactions.dart';
 import '../../providers/expense_categories.dart';
 import '../../providers/income_categories.dart';
+import '../../providers/preferences.dart';
 import '../../providers/selected_wallet.dart';
 import '../../providers/theme.dart';
 
@@ -72,6 +74,54 @@ class HomeSettingPage extends HookConsumerWidget {
               const ManageCategoryRoute(),
             ),
             trailing: const Icon(Icons.chevron_right_rounded),
+          ),
+          const Divider(),
+
+          // dashboard
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              top: 8,
+              bottom: 8,
+            ),
+            child: Text(
+              'Ringkasan',
+              style: context.textTheme.titleMedium,
+            ),
+          ),
+          SwitchListTile(
+            value: ref.watch(
+              preferencesProvider.select(
+                (value) => value.currentWalletSummaryCardVisible,
+              ),
+            ),
+            onChanged: (value) => ref
+                .read(preferencesProvider.notifier)
+                .toggleCurrentWalletSummaryCardVisibility(),
+            title: const Text('Dompet saat ini'),
+            subtitle: const Text(
+              'Tampilkan kartu ringkasan untuk dompet saat ini',
+            ),
+            secondary: const CircleAvatar(
+              child: Icon(Icons.dashboard_rounded),
+            ),
+          ),
+          SwitchListTile(
+            value: ref.watch(
+              preferencesProvider.select(
+                (value) => value.allWalletsSummaryCardVisible,
+              ),
+            ),
+            onChanged: (value) => ref
+                .read(preferencesProvider.notifier)
+                .toggleAllWalletsSummaryCardVisibility(),
+            title: const Text('Semua dompet'),
+            subtitle: const Text(
+              'Tampilkan kartu ringkasan saldo semua dompet',
+            ),
+            secondary: const CircleAvatar(
+              backgroundColor: Colors.transparent,
+            ),
           ),
           const Divider(),
 
@@ -250,6 +300,9 @@ class HomeSettingPage extends HookConsumerWidget {
                 ),
               ),
             ),
+
+          // spacer
+          const Gap(32),
         ],
       ),
     );
