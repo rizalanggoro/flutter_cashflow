@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
+import 'package:cashflow/domain/usecases/create_transaction.dart';
+import 'package:cashflow/domain/usecases/read_transaction_by_id.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
@@ -12,10 +14,8 @@ import '../../../core/utils/extensions.dart';
 import '../../../core/utils/hooks.dart';
 import '../../../data/models/category.dart';
 import '../../../data/models/transaction.dart';
-import '../../../presentation/providers/selected_wallet.dart';
-import '../domain/usecases/create_transaction.dart';
-import '../domain/usecases/read_transaction.dart';
-import '../domain/usecases/update_transaction.dart';
+import '../../../domain/usecases/update_transaction.dart';
+import '../../providers/selected_wallet.dart';
 
 @RoutePage()
 class WriteTransactionPage extends HookConsumerWidget {
@@ -42,8 +42,8 @@ class WriteTransactionPage extends HookConsumerWidget {
       transactionId == null
           ? null
           : useMemoized(() => ref
-              .watch(readTransactionUseCaseProvider)
-              .call(transactionId: transactionId)),
+              .watch(readTransactionByIdUseCaseProvider)
+              .call(transactionId: transactionId!)),
     );
 
     useEffect(

@@ -2,12 +2,12 @@ import 'package:dartz/dartz.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
-import '../../../../core/failure/failure.dart';
-import '../../../../core/utils/typedefs.dart';
-import '../../../../data/models/category.dart';
-import '../../../../data/models/transaction.dart';
-import '../../../../data/models/wallet.dart';
-import '../../../../data/sources/isar.dart';
+import '../../core/failure/failure.dart';
+import '../../core/utils/typedefs.dart';
+import '../../data/models/category.dart';
+import '../../data/models/transaction.dart';
+import '../../data/models/wallet.dart';
+import '../../data/sources/isar.dart';
 
 class _UseCase {
   final Isar _isar;
@@ -17,8 +17,8 @@ class _UseCase {
   FutureUseCase<int> call({
     required double amount,
     required String note,
-    WalletModel? wallet,
-    CategoryModel? category,
+    required WalletModel? wallet,
+    required CategoryModel? category,
     required DateTime dateTime,
   }) async {
     try {
