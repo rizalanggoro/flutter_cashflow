@@ -9,12 +9,12 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../data/sources/isar.dart';
-import '../../../presentation/providers/expense_categories.dart';
-import '../../../presentation/providers/income_categories.dart';
-import '../../../presentation/providers/selected_wallet.dart';
-import '../../../presentation/providers/theme.dart';
-import '../domain/usecases/check_update.dart';
-import '../domain/usecases/dummy_transactions.dart';
+import '../../../domain/usecases/check_update.dart';
+import '../../../domain/usecases/create_dummy_transactions.dart';
+import '../../providers/expense_categories.dart';
+import '../../providers/income_categories.dart';
+import '../../providers/selected_wallet.dart';
+import '../../providers/theme.dart';
 
 @RoutePage()
 class HomeSettingPage extends HookConsumerWidget {
@@ -224,7 +224,7 @@ class HomeSettingPage extends HookConsumerWidget {
                     ),
                     TextButton(
                       onPressed: () => ref
-                          .read(dummyTransactionsUseCaseProvider)
+                          .read(createDummyTransactionsUseCaseProvider)
                           .call(
                             wallet: ref.read(selectedWalletProvider).value,
                             incomeCategories:

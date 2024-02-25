@@ -6,10 +6,10 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:package_info_plus/package_info_plus.dart';
 
-import '../../../../core/configs/config.dart';
-import '../../../../core/failure/failure.dart';
-import '../../../../core/utils/typedefs.dart';
-import '../entities/update_data.dart';
+import '../../core/configs/config.dart';
+import '../../core/failure/failure.dart';
+import '../../core/utils/typedefs.dart';
+import '../../presentation/pages/home_setting/entities/update_data.dart';
 
 class _UseCase {
   FutureUseCase<UpdateData?> call() async {
