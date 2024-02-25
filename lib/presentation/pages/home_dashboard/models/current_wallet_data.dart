@@ -1,7 +1,7 @@
-class CurrentWalletSummaryData {
+class CurrentWalletData {
   final double totalBalance, totalIncome, totalExpense;
 
-  CurrentWalletSummaryData({
+  CurrentWalletData({
     required this.totalBalance,
     required this.totalIncome,
     required this.totalExpense,

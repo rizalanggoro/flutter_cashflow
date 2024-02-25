@@ -7,9 +7,9 @@ import 'package:intl/intl.dart';
 import '../../../../core/enums/category_type.dart';
 import '../../../../core/router/router.gr.dart';
 import '../../../../core/utils/extensions.dart';
-import '../../../../presentation/widgets/empty_container.dart';
-import '../../../../presentation/widgets/loading_container.dart';
-import '../providers/recent_transactions_data.dart';
+import '../../../widgets/empty_container.dart';
+import '../../../widgets/loading_container.dart';
+import '../providers/recent_transactions.dart';
 
 class RecentTransactionsView extends HookConsumerWidget {
   const RecentTransactionsView({super.key});
@@ -32,7 +32,7 @@ class RecentTransactionsView extends HookConsumerWidget {
             'Beberapa transaksi terbaru yang Anda lakukan pada bulan ${DateFormat.yMMMM().format(DateTime.now())}',
           ),
         ),
-        ref.watch(recentTransactionsDataProvider).maybeWhen(
+        ref.watch(recentTransactionsProvider).maybeWhen(
               loading: () => _loadingContainer,
               data: (data) => data.isEmpty
                   ? _emptyContainer

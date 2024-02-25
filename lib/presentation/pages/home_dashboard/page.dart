@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'widgets/all_wallets_summary_view.dart';
-import 'widgets/current_wallet_summary_view.dart';
+import 'widgets/all_wallets_view.dart';
+import 'widgets/current_wallet_view.dart';
 import 'widgets/recent_transactions_view.dart';
 import 'widgets/shortcuts_view.dart';
 
@@ -19,9 +19,9 @@ class HomeDashboardPage extends HookConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Gap(16),
-          CurrentWalletSummaryView(),
+          CurrentWalletView(),
           Gap(8),
-          AllWalletsSummaryView(),
+          AllWalletsView(),
           if (false) Gap(8),
           if (false) ShortcutsView(),
 

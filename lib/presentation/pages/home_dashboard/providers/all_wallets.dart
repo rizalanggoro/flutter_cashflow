@@ -3,23 +3,22 @@ import 'dart:async';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
+import '../../../../core/enums/category_type.dart';
 import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../core/enums/category_type.dart';
-import '../../domain/entities/all_wallets_summary_data.dart';
-import '../../domain/entities/all_wallets_summary_wallet_item.dart';
+import '../models/all_wallets_data.dart';
+import '../models/wallet_item.dart';
 
-class AllWalletsSummaryDataNotifier
-    extends AsyncNotifier<AllWalletsSummaryData?> {
+class AllWalletsNotifier extends AsyncNotifier<AllWalletsData> {
   @override
-  Future<AllWalletsSummaryData?> build() async {
+  Future<AllWalletsData> build() async {
     _listenStreamSubscription();
     return _read();
   }
 
-  Future<AllWalletsSummaryData> _read() async {
+  Future<AllWalletsData> _read() async {
     final totalIncome = await ref
         .watch(isarSourceProvider)
         .instance
@@ -37,7 +36,7 @@ class AllWalletsSummaryDataNotifier
         .amountProperty()
         .sum();
 
-    final List<AllWalletsSummaryWalletItem> walletItems = [];
+    final List<WalletItem> walletItems = [];
     final wallets = await ref
         .watch(isarSourceProvider)
         .instance
@@ -65,14 +64,14 @@ class AllWalletsSummaryDataNotifier
           .amountProperty()
           .sum();
 
-      walletItems.add(AllWalletsSummaryWalletItem(
+      walletItems.add(WalletItem(
         wallet: wallet,
         totalIncome: totalIncome,
         totalExpense: totalExpense,
       ));
     }
 
-    return AllWalletsSummaryData(
+    return AllWalletsData(
       totalBalance: totalIncome - totalExpense,
       walletItems: walletItems,
     );
@@ -93,7 +92,7 @@ class AllWalletsSummaryDataNotifier
   }
 }
 
-final allWalletsSummaryDataProvider = AsyncNotifierProvider<
-    AllWalletsSummaryDataNotifier, AllWalletsSummaryData?>(
-  AllWalletsSummaryDataNotifier.new,
+final allWalletsProvider =
+    AsyncNotifierProvider<AllWalletsNotifier, AllWalletsData>(
+  AllWalletsNotifier.new,
 );

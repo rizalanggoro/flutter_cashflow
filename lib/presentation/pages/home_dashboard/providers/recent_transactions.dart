@@ -1,41 +1,43 @@
 import 'dart:async';
 
+import 'package:cashflow/core/failure/failure.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../presentation/providers/selected_wallet.dart';
+import '../../../providers/selected_wallet.dart';
 
 class RecentTransactionsNotifier extends AsyncNotifier<List<TransactionModel>> {
   @override
   Future<List<TransactionModel>> build() async {
     final walletId = ref.watch(selectedWalletProvider).value?.id;
-    if (walletId != null) {
-      final currentDate = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-      );
-      final nextDate = DateTime(
-        currentDate.year,
-        currentDate.month + 1,
-      );
 
-      _listenStream(
-        walletId: walletId,
-        currentDate: currentDate,
-        nextDate: nextDate,
-      );
-
-      return _read(
-        walletId: walletId,
-        currentDate: currentDate,
-        nextDate: nextDate,
-      );
+    if (walletId == null) {
+      throw Failure(message: 'Tidak ada dompet dipilih!');
     }
 
-    return [];
+    final currentDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+    );
+    final nextDate = DateTime(
+      currentDate.year,
+      currentDate.month + 1,
+    );
+
+    _listenStream(
+      walletId: walletId,
+      currentDate: currentDate,
+      nextDate: nextDate,
+    );
+
+    return _read(
+      walletId: walletId,
+      currentDate: currentDate,
+      nextDate: nextDate,
+    );
   }
 
   Future<List<TransactionModel>> _read({
@@ -95,7 +97,7 @@ class RecentTransactionsNotifier extends AsyncNotifier<List<TransactionModel>> {
   }
 }
 
-final recentTransactionsDataProvider =
+final recentTransactionsProvider =
     AsyncNotifierProvider<RecentTransactionsNotifier, List<TransactionModel>>(
   RecentTransactionsNotifier.new,
 );

@@ -4,50 +4,51 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:isar/isar.dart';
 
 import '../../../../core/enums/category_type.dart';
+import '../../../../core/failure/failure.dart';
 import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../presentation/providers/selected_wallet.dart';
-import '../../domain/entities/current_wallet_summary_data.dart';
+import '../../../providers/selected_wallet.dart';
+import '../models/current_wallet_data.dart';
 
-class CurrentWalletSummaryDataNotifier
-    extends AsyncNotifier<CurrentWalletSummaryData?> {
+class CurrentWalletNotifier extends AsyncNotifier<CurrentWalletData> {
   @override
-  Future<CurrentWalletSummaryData?> build() async {
+  Future<CurrentWalletData> build() async {
     final walletId = ref.watch(selectedWalletProvider).value?.id;
-    if (walletId != null) {
-      final currentDate = DateTime(
-        DateTime.now().year,
-        DateTime.now().month,
-      );
-      final nextDate = DateTime(
-        currentDate.year,
-        currentDate.month + 1,
-      );
 
-      _listenStream(
-        walletId: walletId,
-        currentDate: currentDate,
-        nextDate: nextDate,
-      );
-
-      return _read(
-        walletId: walletId,
-        currentDate: currentDate,
-        nextDate: nextDate,
-      );
+    if (walletId == null) {
+      throw Failure(message: 'Tidak ada dompet dipilih!');
     }
 
-    return null;
+    final currentDate = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+    );
+    final nextDate = DateTime(
+      currentDate.year,
+      currentDate.month + 1,
+    );
+
+    _listenStream(
+      walletId: walletId,
+      currentDate: currentDate,
+      nextDate: nextDate,
+    );
+
+    return _read(
+      walletId: walletId,
+      currentDate: currentDate,
+      nextDate: nextDate,
+    );
   }
 
-  Future<CurrentWalletSummaryData> _read({
+  Future<CurrentWalletData> _read({
     required int walletId,
     required DateTime currentDate,
     required DateTime nextDate,
   }) async {
-    return CurrentWalletSummaryData(
+    return CurrentWalletData(
       totalBalance: await ref
               .watch(isarSourceProvider)
               .instance
@@ -126,7 +127,7 @@ class CurrentWalletSummaryDataNotifier
   }
 }
 
-final currentWalletSummaryDataProvider = AsyncNotifierProvider<
-    CurrentWalletSummaryDataNotifier, CurrentWalletSummaryData?>(
-  CurrentWalletSummaryDataNotifier.new,
+final currentWalletProvider =
+    AsyncNotifierProvider<CurrentWalletNotifier, CurrentWalletData>(
+  CurrentWalletNotifier.new,
 );
