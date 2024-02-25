@@ -9,9 +9,9 @@ import '../../../../data/models/category.dart';
 import '../../../../data/models/transaction.dart';
 import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
-import '../../../../presentation/providers/selected_date_range_filter.dart';
-import '../../../../presentation/providers/selected_wallet.dart';
-import '../../domain/entities/chart_data_item.dart';
+import '../../../providers/selected_date_range_filter.dart';
+import '../../../providers/selected_wallet.dart';
+import '../entities/chart_data_item.dart';
 import 'providers.dart';
 
 class ChartDataNotifier extends AsyncNotifier<List<ChartDataItem>> {

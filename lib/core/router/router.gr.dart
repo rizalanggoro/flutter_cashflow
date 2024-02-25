@@ -10,10 +10,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:auto_route/auto_route.dart' as _i14;
 import 'package:cashflow/data/models/category.dart' as _i16;
-import 'package:cashflow/features/home_chart/presentation/page.dart' as _i2;
 import 'package:cashflow/presentation/pages/detail_transaction/page.dart'
     as _i1;
 import 'package:cashflow/presentation/pages/home/page.dart' as _i4;
+import 'package:cashflow/presentation/pages/home_chart/page.dart' as _i2;
 import 'package:cashflow/presentation/pages/home_dashboard/page.dart' as _i3;
 import 'package:cashflow/presentation/pages/home_setting/page.dart' as _i5;
 import 'package:cashflow/presentation/pages/home_transaction/page.dart' as _i6;

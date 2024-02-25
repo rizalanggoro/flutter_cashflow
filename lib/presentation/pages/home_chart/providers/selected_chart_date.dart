@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/enums/transaction_range_filter.dart';
-import '../../../../presentation/providers/selected_date_range_filter.dart';
+import '../../../providers/selected_date_range_filter.dart';
 import 'selected_chart_detail_date.dart';
 
 class SelectedChartDateNotifier extends Notifier<DateTime> {
