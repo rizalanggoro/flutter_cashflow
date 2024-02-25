@@ -6,8 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../core/utils/hooks.dart';
-import '../../../presentation/providers/selected_wallet.dart';
-import '../domain/usecases/create_wallet.dart';
+import '../../../domain/usecases/create_wallet.dart';
+import '../../providers/selected_wallet.dart';
 
 @RoutePage()
 class WriteWalletPage extends HookConsumerWidget {

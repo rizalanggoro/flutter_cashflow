@@ -8,8 +8,8 @@ import '../../../core/constants/constants.dart';
 import '../../../core/enums/category_type.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../domain/entities/category_type_item.dart';
-import '../../../presentation/providers/selected_wallet.dart';
-import '../domain/usecases/create_category.dart';
+import '../../../domain/usecases/create_category.dart';
+import '../../providers/selected_wallet.dart';
 
 @RoutePage()
 class WriteCategoryPage extends HookConsumerWidget {
