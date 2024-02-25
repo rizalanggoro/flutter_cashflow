@@ -90,87 +90,85 @@ class DetailTransactionPage extends HookConsumerWidget {
         ConnectionState.waiting => const LoadingContainer(),
         ConnectionState.done => transactionSnapshot.data?.fold(
               (l) => FailureContainer(message: l.message),
-              (r) => r == null
-                  ? const EmptyContainer()
-                  : SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                              top: 16,
-                            ),
-                            child: Text(
-                              NumberFormat.currency().format(r.amount),
-                              style: context.textTheme.headlineSmall,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                              top: 16,
-                            ),
-                            child: Text(
-                              'Catatan',
-                              style: context.textTheme.titleMedium,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                              bottom: 16,
-                            ),
-                            child: Text(r.note),
-                          ),
-
-                          // others
-                          const Divider(),
-                          Padding(
-                            padding: const EdgeInsets.only(
-                              left: 16,
-                              right: 16,
-                              top: 8,
-                              bottom: 8,
-                            ),
-                            child: Text(
-                              'Rincian transaksi',
-                              style: context.textTheme.titleMedium,
-                            ),
-                          ),
-                          ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.wallet_rounded),
-                            ),
-                            title: const Text('Dompet'),
-                            subtitle: Text(
-                              r.wallet.value?.name ?? 'Tidak ada dompet',
-                            ),
-                          ),
-                          ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.category_rounded),
-                            ),
-                            title: const Text('Kategori'),
-                            subtitle: Text(
-                              r.category.value?.name ?? 'Tidak ada kategori',
-                            ),
-                          ),
-                          ListTile(
-                            leading: const CircleAvatar(
-                              child: Icon(Icons.today_rounded),
-                            ),
-                            title: const Text('Tanggal'),
-                            subtitle: Text(
-                              DateFormat.yMMMMEEEEd().format(r.date),
-                            ),
-                          ),
-                        ],
+              (r) => SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 16,
+                      ),
+                      child: Text(
+                        NumberFormat.currency().format(r.amount),
+                        style: context.textTheme.headlineSmall,
                       ),
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 16,
+                      ),
+                      child: Text(
+                        'Catatan',
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        bottom: 16,
+                      ),
+                      child: Text(r.note),
+                    ),
+
+                    // others
+                    const Divider(),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                        left: 16,
+                        right: 16,
+                        top: 8,
+                        bottom: 8,
+                      ),
+                      child: Text(
+                        'Rincian transaksi',
+                        style: context.textTheme.titleMedium,
+                      ),
+                    ),
+                    ListTile(
+                      leading: const CircleAvatar(
+                        child: Icon(Icons.wallet_rounded),
+                      ),
+                      title: const Text('Dompet'),
+                      subtitle: Text(
+                        r.wallet.value?.name ?? 'Tidak ada dompet',
+                      ),
+                    ),
+                    ListTile(
+                      leading: const CircleAvatar(
+                        child: Icon(Icons.category_rounded),
+                      ),
+                      title: const Text('Kategori'),
+                      subtitle: Text(
+                        r.category.value?.name ?? 'Tidak ada kategori',
+                      ),
+                    ),
+                    ListTile(
+                      leading: const CircleAvatar(
+                        child: Icon(Icons.today_rounded),
+                      ),
+                      title: const Text('Tanggal'),
+                      subtitle: Text(
+                        DateFormat.yMMMMEEEEd().format(r.date),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ) ??
             const EmptyContainer(),
         _ => const EmptyContainer(),
