@@ -8,11 +8,11 @@ import '../../../core/enums/category_type.dart';
 import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
 import '../../../data/models/category.dart';
-import '../../../presentation/providers/expense_categories.dart';
-import '../../../presentation/providers/income_categories.dart';
-import '../../../presentation/widgets/empty_container.dart';
-import '../../../presentation/widgets/failure_container.dart';
-import '../../../presentation/widgets/loading_container.dart';
+import '../../providers/expense_categories.dart';
+import '../../providers/income_categories.dart';
+import '../../widgets/empty_container.dart';
+import '../../widgets/failure_container.dart';
+import '../../widgets/loading_container.dart';
 
 @RoutePage()
 class SelectCategoryPage extends HookConsumerWidget {
