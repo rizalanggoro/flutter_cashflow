@@ -6,11 +6,11 @@ import 'package:intl/intl.dart';
 
 import '../../../core/failure/failure.dart';
 import '../../../core/router/router.gr.dart';
-import '../../../presentation/providers/selected_wallet.dart';
-import '../../../presentation/providers/wallets.dart';
-import '../../../presentation/widgets/empty_container.dart';
-import '../../../presentation/widgets/failure_container.dart';
-import '../../../presentation/widgets/loading_container.dart';
+import '../../providers/selected_wallet.dart';
+import '../../providers/wallets.dart';
+import '../../widgets/empty_container.dart';
+import '../../widgets/failure_container.dart';
+import '../../widgets/loading_container.dart';
 
 @RoutePage()
 class SelectWalletPage extends HookConsumerWidget {

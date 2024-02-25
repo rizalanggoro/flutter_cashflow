@@ -20,7 +20,6 @@ import 'package:cashflow/features/manage_category/presentation/page.dart'
 import 'package:cashflow/features/manage_wallet/presentation/page.dart' as _i8;
 import 'package:cashflow/features/select_category/presentation/page.dart'
     as _i9;
-import 'package:cashflow/features/select_wallet/presentation/page.dart' as _i10;
 import 'package:cashflow/features/write_category/presentation/page.dart'
     as _i11;
 import 'package:cashflow/features/write_transaction/presentation/page.dart'
@@ -29,6 +28,7 @@ import 'package:cashflow/features/write_wallet/presentation/page.dart' as _i13;
 import 'package:cashflow/presentation/pages/detail_transaction/page.dart'
     as _i1;
 import 'package:cashflow/presentation/pages/home/page.dart' as _i4;
+import 'package:cashflow/presentation/pages/select_wallet/page.dart' as _i10;
 import 'package:flutter/material.dart' as _i15;
 
 abstract class $MyRouter extends _i14.RootStackRouter {
