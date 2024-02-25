@@ -14,12 +14,11 @@ import 'package:cashflow/features/home_chart/presentation/page.dart' as _i2;
 import 'package:cashflow/features/home_setting/presentation/page.dart' as _i5;
 import 'package:cashflow/features/home_transaction/presentation/page.dart'
     as _i6;
-import 'package:cashflow/features/manage_category/presentation/page.dart'
-    as _i7;
 import 'package:cashflow/presentation/pages/detail_transaction/page.dart'
     as _i1;
 import 'package:cashflow/presentation/pages/home/page.dart' as _i4;
 import 'package:cashflow/presentation/pages/home_dashboard/page.dart' as _i3;
+import 'package:cashflow/presentation/pages/manage_category/page.dart' as _i7;
 import 'package:cashflow/presentation/pages/manage_wallet/page.dart' as _i8;
 import 'package:cashflow/presentation/pages/select_category/page.dart' as _i9;
 import 'package:cashflow/presentation/pages/select_wallet/page.dart' as _i10;

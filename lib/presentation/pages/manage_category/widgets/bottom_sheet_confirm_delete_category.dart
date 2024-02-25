@@ -7,7 +7,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../../core/utils/extensions.dart';
 import '../../../../data/models/category.dart';
-import '../../domain/usecases/delete_category.dart';
+import '../../../../domain/usecases/delete_category_by_id.dart';
 
 class BottomSheetConfirmDeleteCategory extends HookConsumerWidget {
   final CategoryModel category;
@@ -125,7 +125,7 @@ class BottomSheetConfirmDeleteCategory extends HookConsumerWidget {
                 const Gap(8),
                 FilledButton(
                   onPressed: () => ref
-                      .watch(deleteCategoryUseCaseProvider)
+                      .watch(deleteCategoryByIdUseCaseProvider)
                       .call(categoryId: category.id)
                       .then(
                         (value) => value.fold(
