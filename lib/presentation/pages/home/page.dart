@@ -5,27 +5,27 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
-import '../../../domain/entities/home_navigation_item.dart';
 import '../../providers/selected_wallet.dart';
 import '../../widgets/bottom_sheets/transaction_filter.dart';
+import 'models/navigation_item.dart';
 
-final _navigationItems = <HomeNavigationItem>[
-  HomeNavigationItem(
+final _navigationItems = <NavigationItem>[
+  NavigationItem(
     title: 'Ringkasan',
     icon: Icons.dashboard_outlined,
     selectedIcon: Icons.dashboard_rounded,
   ),
-  HomeNavigationItem(
+  NavigationItem(
     title: 'Transaksi',
     icon: Icons.payment_outlined,
     selectedIcon: Icons.payment_rounded,
   ),
-  HomeNavigationItem(
+  NavigationItem(
     title: 'Grafik',
     icon: Icons.pie_chart_outline_rounded,
     selectedIcon: Icons.pie_chart_rounded,
   ),
-  HomeNavigationItem(
+  NavigationItem(
     title: 'Setelan',
     icon: Icons.settings_outlined,
     selectedIcon: Icons.settings_rounded,
