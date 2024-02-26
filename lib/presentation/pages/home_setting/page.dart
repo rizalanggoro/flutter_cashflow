@@ -16,7 +16,6 @@ import '../../providers/expense_categories.dart';
 import '../../providers/income_categories.dart';
 import '../../providers/preferences.dart';
 import '../../providers/selected_wallet.dart';
-import '../../providers/theme.dart';
 
 @RoutePage()
 class HomeSettingPage extends HookConsumerWidget {
@@ -32,10 +31,10 @@ class HomeSettingPage extends HookConsumerWidget {
         children: [
           // theme
           SwitchListTile(
-            value: ref.watch(themeProvider) == ThemeMode.dark,
-            onChanged: (value) => ref
-                .read(themeProvider.notifier)
-                .change(themeMode: value ? ThemeMode.dark : ThemeMode.light),
+            value: ref.watch(
+                preferencesProvider.select((value) => value.darkThemeEnable)),
+            onChanged: (value) =>
+                ref.read(preferencesProvider.notifier).toggleDarkTheme(),
             title: const Text('Mode gelap'),
             subtitle: const Text(
               'Gunakan tampilan yang lebih nyaman untuk mata Anda',

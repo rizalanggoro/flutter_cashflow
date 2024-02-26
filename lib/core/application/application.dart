@@ -1,7 +1,7 @@
+import 'package:cashflow/presentation/providers/preferences.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import '../../presentation/providers/theme.dart';
 import '../router/router.dart';
 
 MyRouter? _router;
@@ -18,7 +18,11 @@ class MyApplication extends ConsumerWidget {
       routerConfig: _router?.config(),
       theme: ThemeData(
         useMaterial3: true,
-        brightness: ref.watch(themeProvider) == ThemeMode.dark
+        brightness: ref.watch(
+          preferencesProvider.select(
+            (value) => value.darkThemeEnable,
+          ),
+        )
             ? Brightness.dark
             : Brightness.light,
         colorSchemeSeed: const Color(0xff164863),

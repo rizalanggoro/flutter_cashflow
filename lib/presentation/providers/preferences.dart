@@ -4,24 +4,30 @@ import '../../data/sources/preferences.dart';
 
 const _prefCurrentWalletSummaryCardVisible = 'currentWalletSummaryCardVisible';
 const _prefAllWalletsSummaryCardVisible = 'allWalletsSummaryCardVisible';
+const _prefDarkThemeEnable = 'theme';
 
 class PreferenceData {
-  final bool currentWalletSummaryCardVisible, allWalletsSummaryCardVisible;
+  final bool currentWalletSummaryCardVisible,
+      allWalletsSummaryCardVisible,
+      darkThemeEnable;
 
   PreferenceData({
     required this.currentWalletSummaryCardVisible,
     required this.allWalletsSummaryCardVisible,
+    required this.darkThemeEnable,
   });
 
   PreferenceData copyWith({
     bool? currentWalletSummaryCardVisible,
     bool? allWalletsSummaryCardVisible,
+    bool? darkThemeEnable,
   }) =>
       PreferenceData(
         currentWalletSummaryCardVisible: currentWalletSummaryCardVisible ??
             this.currentWalletSummaryCardVisible,
         allWalletsSummaryCardVisible:
             allWalletsSummaryCardVisible ?? this.allWalletsSummaryCardVisible,
+        darkThemeEnable: darkThemeEnable ?? this.darkThemeEnable,
       );
 }
 
@@ -35,6 +41,7 @@ class PreferencesNotifier extends Notifier<PreferenceData> {
           preferences.getBool(_prefCurrentWalletSummaryCardVisible) ?? true,
       allWalletsSummaryCardVisible:
           preferences.getBool(_prefAllWalletsSummaryCardVisible) ?? true,
+      darkThemeEnable: preferences.getBool(_prefDarkThemeEnable) ?? false,
     );
   }
 
@@ -60,6 +67,19 @@ class PreferencesNotifier extends Notifier<PreferenceData> {
         .then(
           (value) => state = state.copyWith(
             allWalletsSummaryCardVisible: newValue,
+          ),
+        );
+  }
+
+  void toggleDarkTheme() async {
+    final newValue = !state.darkThemeEnable;
+    ref
+        .read(preferencesSourceProvider)
+        .instance
+        .setBool(_prefDarkThemeEnable, newValue)
+        .then(
+          (value) => state = state.copyWith(
+            darkThemeEnable: newValue,
           ),
         );
   }
