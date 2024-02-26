@@ -38,7 +38,7 @@ class _UseCase {
 
         final packageInfo = await PackageInfo.fromPlatform();
         final currentBuildNumber =
-            int.parse(packageInfo.buildNumber) + (kDebugMode ? 0 : 2000);
+            int.parse(packageInfo.buildNumber) + (kDebugMode ? 2000 : 0);
 
         if (currentBuildNumber < latestBuildNumber) {
           // new update available
