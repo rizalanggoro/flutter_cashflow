@@ -76,6 +76,7 @@ class MyApplication extends ConsumerWidget {
         visualDensity: FlexColorScheme.comfortablePlatformDensity,
         useMaterial3: true,
         swapLegacyOnMaterial3: true,
+        appBarStyle: FlexAppBarStyle.scaffoldBackground,
       ),
       darkTheme: FlexThemeData.dark(
         scheme: colorScheme,
@@ -120,6 +121,7 @@ class MyApplication extends ConsumerWidget {
         darkIsTrueBlack: ref.watch(preferencesProvider.select(
           (value) => value.appearanceUseTrueDark,
         )),
+        appBarStyle: FlexAppBarStyle.scaffoldBackground,
       ),
     );
   }
