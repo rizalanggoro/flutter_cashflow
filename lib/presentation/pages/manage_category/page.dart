@@ -53,7 +53,9 @@ class ManageCategoryPage extends HookConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => context.router.push(const WriteCategoryRoute()),
+        onPressed: () => context.router.push(
+          const WriteCategoryRoute(),
+        ),
         child: const Icon(Icons.add_rounded),
       ),
       body: TabBarView(
@@ -87,10 +89,13 @@ class ManageCategoryPage extends HookConsumerWidget {
                         final categoryType = category.type;
 
                         return ListTile(
-                          leading: Icon(
-                            categoryType.isIncome
-                                ? Icons.south_west_rounded
-                                : Icons.north_east_rounded,
+                          leading: CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              categoryType.isIncome
+                                  ? Icons.south_west_rounded
+                                  : Icons.north_east_rounded,
+                            ),
                           ),
                           title: Text(category.name),
                           subtitle: FutureBuilder(
