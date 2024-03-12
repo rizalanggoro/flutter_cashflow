@@ -67,7 +67,7 @@ class SettingAppearancePage extends HookConsumerWidget {
               ),
             ),
             const Divider(),
-            const Gap(16),
+            const Gap(8),
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 16,

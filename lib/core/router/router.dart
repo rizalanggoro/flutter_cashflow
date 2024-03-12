@@ -79,5 +79,7 @@ class MyRouter extends $MyRouter {
         // settings
         AutoRoute(page: SettingAppearanceRoute.page),
         AutoRoute(page: SelectAppearanceColorSchemeRoute.page),
+        AutoRoute(page: SettingDashboardRoute.page),
+        AutoRoute(page: SettingUpdateRoute.page),
       ];
 }

@@ -1,20 +1,15 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:gap/gap.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../../data/sources/isar.dart';
-import '../../../domain/usecases/check_update.dart';
 import '../../../domain/usecases/create_dummy_transactions.dart';
 import '../../providers/expense_categories.dart';
 import '../../providers/income_categories.dart';
-import '../../providers/preferences.dart';
 import '../../providers/selected_wallet.dart';
 
 @RoutePage()
@@ -23,188 +18,83 @@ class HomeSettingPage extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final isCheckingUpdate = useState(false);
-
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // look and appearance
-          ListTile(
-            leading: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              child: Icon(Icons.brush_outlined),
-            ),
-            title: Text('Tema'),
-            subtitle: Text('Ubah nuansa warna dan tema aplikasi'),
-            onTap: () => context.router.push(SettingAppearanceRoute()),
-          ),
-
-          // theme
-          // SwitchListTile(
-          //   value: ref.watch(
-          //       preferencesProvider.select((value) => value.darkThemeEnable)),
-          //   onChanged: (value) =>
-          //       ref.read(preferencesProvider.notifier).toggleDarkTheme(),
-          //   title: const Text('Mode gelap'),
-          //   subtitle: const Text(
-          //     'Gunakan tampilan yang lebih nyaman untuk mata Anda',
-          //   ),
-          //   secondary: const CircleAvatar(
-          //     child: Icon(Icons.dark_mode_rounded),
-          //   ),
-          // ),
-          const Divider(),
-
           // manage wallet
           ListTile(
             leading: const CircleAvatar(
+              backgroundColor: Colors.transparent,
               child: Icon(Icons.wallet_rounded),
             ),
-            title: const Text('Kelola dompet'),
+            title: const Text('Dompet'),
             subtitle: const Text(
               'Buat, ubah, dan hapus dompet yang Anda miliki',
             ),
             onTap: () => context.router.push(
               const ManageWalletRoute(),
             ),
-            trailing: const Icon(Icons.chevron_right_rounded),
           ),
 
           // manage category
           ListTile(
             leading: const CircleAvatar(
+              backgroundColor: Colors.transparent,
               child: Icon(Icons.category_rounded),
             ),
-            title: const Text('Kelola kategori'),
+            title: const Text('Kategori'),
             subtitle: const Text(
               'Buat, ubah, dan hapus kategori untuk setiap dompet yang Anda miliki',
             ),
             onTap: () => context.router.push(
               const ManageCategoryRoute(),
             ),
-            trailing: const Icon(Icons.chevron_right_rounded),
           ),
           const Divider(),
 
-          // dashboard
+          // other settings
+          const Gap(8),
           Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              top: 8,
-              bottom: 8,
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16,
             ),
             child: Text(
-              'Ringkasan',
+              'Lainnya',
               style: context.textTheme.titleMedium,
             ),
           ),
-          SwitchListTile(
-            value: ref.watch(
-              preferencesProvider.select(
-                (value) => value.dashboardShowCurrentWalletCard,
-              ),
-            ),
-            onChanged: (value) => ref
-                .read(preferencesProvider.notifier)
-                .toggleCurrentWalletSummaryCardVisibility(),
-            title: const Text('Dompet saat ini'),
-            subtitle: const Text(
-              'Tampilkan kartu ringkasan untuk dompet saat ini',
-            ),
-            secondary: const CircleAvatar(
-              child: Icon(Icons.dashboard_rounded),
-            ),
-          ),
-          SwitchListTile(
-            value: ref.watch(
-              preferencesProvider.select(
-                (value) => value.dashboardShowAllWalletsCard,
-              ),
-            ),
-            onChanged: (value) => ref
-                .read(preferencesProvider.notifier)
-                .toggleAllWalletsSummaryCardVisibility(),
-            title: const Text('Semua dompet'),
-            subtitle: const Text(
-              'Tampilkan kartu ringkasan saldo semua dompet',
-            ),
-            secondary: const CircleAvatar(
+          const Gap(8),
+
+          ListTile(
+            leading: const CircleAvatar(
               backgroundColor: Colors.transparent,
+              child: Icon(Icons.brush_outlined),
             ),
-          ),
-          const Divider(),
-
-          // about
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              top: 8,
-              bottom: 8,
-            ),
-            child: Text(
-              'Tentang',
-              style: context.textTheme.titleMedium,
+            title: const Text('Tema dan warna'),
+            onTap: () => context.router.push(
+              const SettingAppearanceRoute(),
             ),
           ),
           ListTile(
             leading: const CircleAvatar(
-              child: Icon(Icons.info_rounded),
+              backgroundColor: Colors.transparent,
+              child: Icon(Icons.dashboard_outlined),
             ),
-            title: const Text('Versi'),
-            subtitle: FutureBuilder(
-              future: PackageInfo.fromPlatform(),
-              builder: (context, snapshot) => Text(
-                '${(snapshot.data?.version)}+${snapshot.data?.buildNumber}',
-              ),
+            title: const Text('Widget ringkasan'),
+            onTap: () => context.router.push(
+              const SettingDashboardRoute(),
             ),
           ),
           ListTile(
-            enabled: !isCheckingUpdate.value,
             leading: const CircleAvatar(
-              child: Icon(Icons.update_rounded),
+              backgroundColor: Colors.transparent,
+              child: Icon(Icons.update_outlined),
             ),
-            title: const Text('Periksa pembaruan'),
-            onTap: isCheckingUpdate.value
-                ? null
-                : () {
-                    isCheckingUpdate.value = true;
-                    ref
-                        .read(checkUpdateUseCaseProvider)
-                        .call()
-                        .then(
-                          (value) => value.fold(
-                            (l) => context.showSnackBar(message: l.message),
-                            (r) => r == null
-                                ? context.showSnackBar(
-                                    message: 'Tidak ada pembaruan!',
-                                  )
-                                : context.showSnackBar(
-                                    message: 'Tersedia pembaruan!',
-                                    action: SnackBarAction(
-                                      label: 'Unduh',
-                                      onPressed: () => launchUrl(
-                                        Uri.parse(r.downloadUrl),
-                                        mode: LaunchMode.externalApplication,
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                        )
-                        .whenComplete(
-                          () => isCheckingUpdate.value = false,
-                        );
-                  },
-            trailing: isCheckingUpdate.value
-                ? const SizedBox(
-                    width: 24,
-                    height: 24,
-                    child: CircularProgressIndicator(
-                      strokeCap: StrokeCap.round,
-                      strokeWidth: 3.2,
-                    ),
-                  )
-                : const Icon(Icons.chevron_right_rounded),
+            title: const Text('Pembaruan'),
+            onTap: () => context.router.push(
+              const SettingUpdateRoute(),
+            ),
           ),
 
           if (kDebugMode) const Divider(),
