@@ -52,7 +52,7 @@ class HomePage extends HookConsumerWidget {
 
         return Scaffold(
           appBar: AppBar(
-            toolbarHeight: 64,
+            toolbarHeight: 72,
             title: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -93,16 +93,26 @@ class HomePage extends HookConsumerWidget {
                   ]
                 : null,
           ),
-          bottomNavigationBar: NavigationBar(
-            selectedIndex: activeIndex,
-            onDestinationSelected: (value) => tabsRouter.setActiveIndex(value),
-            destinations: _navigationItems
-                .map((e) => NavigationDestination(
-                      icon: Icon(e.icon),
-                      selectedIcon: Icon(e.selectedIcon),
-                      label: e.title,
-                    ))
-                .toList(),
+          bottomNavigationBar: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: context.colorScheme.outlineVariant,
+                ),
+              ),
+            ),
+            child: NavigationBar(
+              selectedIndex: activeIndex,
+              onDestinationSelected: (value) =>
+                  tabsRouter.setActiveIndex(value),
+              destinations: _navigationItems
+                  .map((e) => NavigationDestination(
+                        icon: Icon(e.icon),
+                        selectedIcon: Icon(e.selectedIcon),
+                        label: e.title,
+                      ))
+                  .toList(),
+            ),
           ),
           floatingActionButton: activeIndex < 3
               ? FloatingActionButton(

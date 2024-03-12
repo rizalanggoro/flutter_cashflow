@@ -29,20 +29,31 @@ class HomeSettingPage extends HookConsumerWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // theme
-          SwitchListTile(
-            value: ref.watch(
-                preferencesProvider.select((value) => value.darkThemeEnable)),
-            onChanged: (value) =>
-                ref.read(preferencesProvider.notifier).toggleDarkTheme(),
-            title: const Text('Mode gelap'),
-            subtitle: const Text(
-              'Gunakan tampilan yang lebih nyaman untuk mata Anda',
+          // look and appearance
+          ListTile(
+            leading: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              child: Icon(Icons.brush_outlined),
             ),
-            secondary: const CircleAvatar(
-              child: Icon(Icons.dark_mode_rounded),
-            ),
+            title: Text('Tema'),
+            subtitle: Text('Ubah nuansa warna dan tema aplikasi'),
+            onTap: () => context.router.push(SettingAppearanceRoute()),
           ),
+
+          // theme
+          // SwitchListTile(
+          //   value: ref.watch(
+          //       preferencesProvider.select((value) => value.darkThemeEnable)),
+          //   onChanged: (value) =>
+          //       ref.read(preferencesProvider.notifier).toggleDarkTheme(),
+          //   title: const Text('Mode gelap'),
+          //   subtitle: const Text(
+          //     'Gunakan tampilan yang lebih nyaman untuk mata Anda',
+          //   ),
+          //   secondary: const CircleAvatar(
+          //     child: Icon(Icons.dark_mode_rounded),
+          //   ),
+          // ),
           const Divider(),
 
           // manage wallet
@@ -91,7 +102,7 @@ class HomeSettingPage extends HookConsumerWidget {
           SwitchListTile(
             value: ref.watch(
               preferencesProvider.select(
-                (value) => value.currentWalletSummaryCardVisible,
+                (value) => value.dashboardShowCurrentWalletCard,
               ),
             ),
             onChanged: (value) => ref
@@ -108,7 +119,7 @@ class HomeSettingPage extends HookConsumerWidget {
           SwitchListTile(
             value: ref.watch(
               preferencesProvider.select(
-                (value) => value.allWalletsSummaryCardVisible,
+                (value) => value.dashboardShowAllWalletsCard,
               ),
             ),
             onChanged: (value) => ref

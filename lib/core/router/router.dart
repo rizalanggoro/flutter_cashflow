@@ -75,5 +75,9 @@ class MyRouter extends $MyRouter {
           page: DetailTransactionRoute.page,
           // initial: true,
         ),
+
+        // settings
+        AutoRoute(page: SettingAppearanceRoute.page),
+        AutoRoute(page: SelectAppearanceColorSchemeRoute.page),
       ];
 }

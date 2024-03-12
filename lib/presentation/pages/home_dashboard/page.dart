@@ -16,12 +16,12 @@ class HomeDashboardPage extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final currentWalletSummaryCardVisible = ref.watch(
       preferencesProvider.select(
-        (value) => value.currentWalletSummaryCardVisible,
+        (value) => value.dashboardShowCurrentWalletCard,
       ),
     );
     final allWalletsSummaryCardVisible = ref.watch(
       preferencesProvider.select(
-        (value) => value.allWalletsSummaryCardVisible,
+        (value) => value.dashboardShowAllWalletsCard,
       ),
     );
 

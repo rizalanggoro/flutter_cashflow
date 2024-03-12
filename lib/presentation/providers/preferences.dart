@@ -1,90 +1,114 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../../data/sources/preferences.dart';
+import '../models/preference.dart';
 
-const _prefCurrentWalletSummaryCardVisible = 'currentWalletSummaryCardVisible';
-const _prefAllWalletsSummaryCardVisible = 'allWalletsSummaryCardVisible';
-const _prefDarkThemeEnable = 'theme';
-
-class PreferenceData {
-  final bool currentWalletSummaryCardVisible,
-      allWalletsSummaryCardVisible,
-      darkThemeEnable;
-
-  PreferenceData({
-    required this.currentWalletSummaryCardVisible,
-    required this.allWalletsSummaryCardVisible,
-    required this.darkThemeEnable,
-  });
-
-  PreferenceData copyWith({
-    bool? currentWalletSummaryCardVisible,
-    bool? allWalletsSummaryCardVisible,
-    bool? darkThemeEnable,
-  }) =>
-      PreferenceData(
-        currentWalletSummaryCardVisible: currentWalletSummaryCardVisible ??
-            this.currentWalletSummaryCardVisible,
-        allWalletsSummaryCardVisible:
-            allWalletsSummaryCardVisible ?? this.allWalletsSummaryCardVisible,
-        darkThemeEnable: darkThemeEnable ?? this.darkThemeEnable,
-      );
-}
-
-class PreferencesNotifier extends Notifier<PreferenceData> {
+class PreferencesNotifier extends Notifier<Preference> {
   @override
-  PreferenceData build() {
+  Preference build() {
     final preferences = ref.watch(preferencesSourceProvider).instance;
 
-    return PreferenceData(
-      currentWalletSummaryCardVisible:
-          preferences.getBool(_prefCurrentWalletSummaryCardVisible) ?? true,
-      allWalletsSummaryCardVisible:
-          preferences.getBool(_prefAllWalletsSummaryCardVisible) ?? true,
-      darkThemeEnable: preferences.getBool(_prefDarkThemeEnable) ?? false,
+    return Preference(
+      // dashboard
+      dashboardShowCurrentWalletCard:
+          preferences.getBool(Preference.dashboardShowCurrentWalletCardKey) ??
+              true,
+      dashboardShowAllWalletsCard:
+          preferences.getBool(Preference.dashboardShowAllWalletsCardKey) ??
+              true,
+
+      // appearance
+      appearanceUseSystemTheme:
+          preferences.getBool(Preference.appearanceUseSystemThemeKey) ?? true,
+      appearanceUseDarkMode:
+          preferences.getBool(Preference.appearanceUseDarkModeKey) ?? false,
+      appearanceUseTrueDark:
+          preferences.getBool(Preference.appearanceUseTrueDarkKey) ?? false,
+      appearanceColorSchemeName:
+          preferences.getString(Preference.appearanceColorSchemeNameKey) ??
+              FlexScheme.dellGenoa.name,
     );
   }
 
   void toggleCurrentWalletSummaryCardVisibility() async {
-    final newValue = !state.currentWalletSummaryCardVisible;
+    final newValue = !state.dashboardShowCurrentWalletCard;
     ref
         .read(preferencesSourceProvider)
         .instance
-        .setBool(_prefCurrentWalletSummaryCardVisible, newValue)
+        .setBool(Preference.dashboardShowCurrentWalletCardKey, newValue)
         .then(
           (value) => state = state.copyWith(
-            currentWalletSummaryCardVisible: newValue,
+            dashboardShowCurrentWalletCard: newValue,
           ),
         );
   }
 
   void toggleAllWalletsSummaryCardVisibility() async {
-    final newValue = !state.allWalletsSummaryCardVisible;
+    final newValue = !state.dashboardShowAllWalletsCard;
     ref
         .read(preferencesSourceProvider)
         .instance
-        .setBool(_prefAllWalletsSummaryCardVisible, newValue)
+        .setBool(Preference.dashboardShowAllWalletsCardKey, newValue)
         .then(
           (value) => state = state.copyWith(
-            allWalletsSummaryCardVisible: newValue,
+            dashboardShowAllWalletsCard: newValue,
           ),
         );
   }
 
-  void toggleDarkTheme() async {
-    final newValue = !state.darkThemeEnable;
+  void toggleAppearanceUseSystemTheme() async {
+    final newValue = !state.appearanceUseSystemTheme;
     ref
         .read(preferencesSourceProvider)
         .instance
-        .setBool(_prefDarkThemeEnable, newValue)
+        .setBool(Preference.appearanceUseSystemThemeKey, newValue)
         .then(
           (value) => state = state.copyWith(
-            darkThemeEnable: newValue,
+            appearanceUseSystemTheme: newValue,
           ),
         );
   }
+
+  void toggleAppearanceUseDarkMode() async {
+    final newValue = !state.appearanceUseDarkMode;
+    ref
+        .read(preferencesSourceProvider)
+        .instance
+        .setBool(Preference.appearanceUseDarkModeKey, newValue)
+        .then(
+          (value) => state = state.copyWith(
+            appearanceUseDarkMode: newValue,
+          ),
+        );
+  }
+
+  void toggleAppearanceUseTrueDark() async {
+    final newValue = !state.appearanceUseTrueDark;
+    ref
+        .read(preferencesSourceProvider)
+        .instance
+        .setBool(Preference.appearanceUseTrueDarkKey, newValue)
+        .then(
+          (value) => state = state.copyWith(
+            appearanceUseTrueDark: newValue,
+          ),
+        );
+  }
+
+  void updateAppearanceColorScheme({
+    required String colorSchemeName,
+  }) async =>
+      ref
+          .read(preferencesSourceProvider)
+          .instance
+          .setString(Preference.appearanceColorSchemeNameKey, colorSchemeName)
+          .then(
+            (value) => state = state.copyWith(
+              appearanceColorSchemeName: colorSchemeName,
+            ),
+          );
 }
 
 final preferencesProvider =
-    NotifierProvider<PreferencesNotifier, PreferenceData>(
-        PreferencesNotifier.new);
+    NotifierProvider<PreferencesNotifier, Preference>(PreferencesNotifier.new);
