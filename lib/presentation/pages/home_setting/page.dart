@@ -115,6 +115,7 @@ class HomeSettingPage extends HookConsumerWidget {
           if (kDebugMode)
             ListTile(
               leading: const CircleAvatar(
+                backgroundColor: Colors.transparent,
                 child: Icon(Icons.delete_rounded),
               ),
               trailing: const Icon(Icons.chevron_right_rounded),
@@ -153,6 +154,7 @@ class HomeSettingPage extends HookConsumerWidget {
           if (kDebugMode)
             ListTile(
               leading: const CircleAvatar(
+                backgroundColor: Colors.transparent,
                 child: Icon(Icons.payment_rounded),
               ),
               trailing: const Icon(Icons.chevron_right_rounded),

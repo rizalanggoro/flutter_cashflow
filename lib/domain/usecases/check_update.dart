@@ -9,7 +9,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../../core/configs/config.dart';
 import '../../core/failure/failure.dart';
 import '../../core/utils/typedefs.dart';
-import '../../presentation/pages/home_setting/entities/update_data.dart';
+import '../../presentation/pages/setting_update/models/update_data.dart';
 
 class _UseCase {
   FutureUseCase<UpdateData?> call() async {

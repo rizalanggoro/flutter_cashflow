@@ -7,7 +7,7 @@ import '../../../core/router/router.gr.dart';
 import '../../../core/utils/extensions.dart';
 import '../../providers/selected_wallet.dart';
 import '../../widgets/bottom_sheets/transaction_filter.dart';
-import 'entities/navigation_item.dart';
+import 'models/navigation_item.dart';
 
 final _navigationItems = <NavigationItem>[
   NavigationItem(

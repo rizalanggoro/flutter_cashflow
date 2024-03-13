@@ -11,7 +11,7 @@ import '../../../../data/models/wallet.dart';
 import '../../../../data/sources/isar.dart';
 import '../../../providers/selected_date_range_filter.dart';
 import '../../../providers/selected_wallet.dart';
-import '../entities/chart_detail_data.dart';
+import '../models/chart_detail_data.dart';
 import 'selected_chart_detail_date.dart';
 
 class ChartDetailDataNotifier extends AsyncNotifier<ChartDetailData?> {
